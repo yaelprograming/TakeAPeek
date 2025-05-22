@@ -1,0 +1,70 @@
+<div class="login-container">
+    <div class="login-card">
+      <div class="login-header">
+        <h1>Take a Peek</h1>
+        <p>התחבר למערכת</p>
+      </div>
+  
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+        <div class="form-group">
+          <label for="email">אימייל</label>
+          <input 
+            type="email" 
+            id="email" 
+            formControlName="email" 
+            placeholder="הזן את האימייל שלך"
+            [ngClass]="{'invalid': loginForm.get('email')?.invalid && loginForm.get('email')?.touched}"
+          >
+          @if (loginForm.get('email')?.invalid && loginForm.get('email')?.touched) {
+            <div class="error-message">
+              @if (loginForm.get('email')?.errors?.['required']) {
+                <span>אימייל הוא שדה חובה</span>
+              }
+              @if (loginForm.get('email')?.errors?.['email']) {
+                <span>אנא הזן אימייל תקין</span>
+              }
+            </div>
+          }
+        </div>
+  
+        <div class="form-group">
+          <label for="password">סיסמה</label>
+          <input 
+            type="password" 
+            id="password" 
+            formControlName="password" 
+            placeholder="הזן את הסיסמה שלך"
+            [ngClass]="{'invalid': loginForm.get('password')?.invalid && loginForm.get('password')?.touched}"
+          >
+          @if (loginForm.get('password')?.invalid && loginForm.get('password')?.touched) {
+            <div class="error-message">
+              @if (loginForm.get('password')?.errors?.['required']) {
+                <span>סיסמה היא שדה חובה</span>
+              }
+              @if (loginForm.get('password')?.errors?.['minlength']) {
+                <span>הסיסמה חייבת להכיל לפחות 6 תווים</span>
+              }
+            </div>
+          }
+        </div>
+  
+        @if (errorMessage) {
+          <div class="error-alert">
+            {{ errorMessage }}
+          </div>
+        }
+  
+        <button 
+          type="submit" 
+          class="login-button" 
+          [disabled]="loginForm.invalid || isSubmitting"
+        >
+          @if (!isSubmitting) {
+            <span>Log in</span>
+          } @else {
+            <span>מתחבר...</span>
+          }
+        </button>
+      </form>
+    </div>
+  </div>

@@ -1,0 +1,209 @@
+<div class="analytics-dashboard">
+    <div class="page-header">
+      <h1>לוח מחוונים אנליטי</h1>
+      <div class="time-range-filter">
+        <label>תקופת זמן:</label>
+        <select [formControl]="timeRangeControl">
+          <option value="7">7 ימים אחרונים</option>
+          <option value="30">30 ימים אחרונים</option>
+          <option value="90">90 ימים אחרונים</option>
+          <option value="365">שנה אחרונה</option>
+        </select>
+      </div>
+    </div>
+    
+    <!-- כרטיסי סטטיסטיקה מהירה -->
+    <div class="stats-cards">
+      <div class="stat-card">
+        <div class="stat-icon">
+          <i class="feather-icon icon-users"></i>
+        </div>
+        <div class="stat-content">
+          <h3>סה"כ משתמשים</h3>
+          <div class="stat-value">{{ summaryStats.totalUsers }}</div>
+        </div>
+      </div>
+      
+      <div class="stat-card">
+        <div class="stat-icon">
+          <i class="feather-icon icon-image"></i>
+        </div>
+        <div class="stat-content">
+          <h3>סה"כ קבצים</h3>
+          <div class="stat-value">{{ summaryStats.totalFiles }}</div>
+        </div>
+      </div>
+      
+      <div class="stat-card">
+        <div class="stat-icon">
+          <i class="feather-icon icon-hard-drive"></i>
+        </div>
+        <div class="stat-content">
+          <h3>נפח אחסון</h3>
+          <div class="stat-value">{{ formatStorageSize(summaryStats.totalStorage) }}</div>
+        </div>
+      </div>
+      
+      <div class="stat-card">
+        <div class="stat-icon">
+          <i class="feather-icon icon-grid"></i>
+        </div>
+        <div class="stat-content">
+          <h3>סה"כ קולאז'ים</h3>
+          <div class="stat-value">{{ summaryStats.totalCollages }}</div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- גרפים -->
+    <div class="charts-grid">
+      <!-- גרף העלאות קבצים -->
+      <div class="chart-card">
+        <div class="card-header">
+          <h2>העלאות קבצים</h2>
+        </div>
+        
+        <div class="card-content">
+          @if (isLoading) {
+            <div class="loading-spinner">
+              <div class="spinner"></div>
+              <span>טוען נתונים...</span>
+            </div>
+          } @else {
+            <div class="chart-container">
+              <ngx-charts-line-chart
+                [view]="view"
+                [scheme]="colorScheme"
+                [results]="fileUploadData"
+                [gradient]="gradient"
+                [xAxis]="showXAxis"
+                [yAxis]="showYAxis"
+                [legend]="showLegend"
+                [showXAxisLabel]="showXAxisLabel"
+                [showYAxisLabel]="showYAxisLabel"
+                [xAxisLabel]="'תאריך'"
+                [yAxisLabel]="'מספר קבצים'"
+                [timeline]="timeline"
+                (window:resize)="onResize($event)"
+              >
+              </ngx-charts-line-chart>
+            </div>
+          }
+        </div>
+      </div>
+      
+      <!-- גרף שימוש באחסון -->
+      <div class="chart-card">
+        <div class="card-header">
+          <h2>שימוש באחסון</h2>
+        </div>
+        
+        <div class="card-content">
+          @if (!isLoading) {
+            <div class="chart-container">
+              <ngx-charts-pie-chart
+                [view]="view"
+                [scheme]="colorScheme"
+                [results]="storageUsageData"
+                [gradient]="gradient"
+                [legend]="showLegend"
+                [labels]="true"
+                [doughnut]="true"
+                (window:resize)="onResize($event)"
+              >
+              </ngx-charts-pie-chart>
+            </div>
+          }
+        </div>
+      </div>
+      
+      <!-- גרף פעילות משתמשים -->
+      <div class="chart-card">
+        <div class="card-header">
+          <h2>פעילות משתמשים</h2>
+        </div>
+        
+        <div class="card-content">
+          @if (!isLoading) {
+            <div class="chart-container">
+              <ngx-charts-line-chart
+                [view]="view"
+                [scheme]="colorScheme"
+                [results]="userActivityData"
+                [gradient]="gradient"
+                [xAxis]="showXAxis"
+                [yAxis]="showYAxis"
+                [legend]="showLegend"
+                [showXAxisLabel]="showXAxisLabel"
+                [showYAxisLabel]="showYAxisLabel"
+                [xAxisLabel]="'תאריך'"
+                [yAxisLabel]="'מספר משתמשים'"
+                [timeline]="timeline"
+                (window:resize)="onResize($event)"
+              >
+              </ngx-charts-line-chart>
+            </div>
+          }
+        </div>
+      </div>
+      
+      <!-- גרף יצירת קולאז'ים -->
+      <div class="chart-card">
+        <div class="card-header">
+          <h2>יצירת קולאז'ים</h2>
+        </div>
+        
+        <div class="card-content">
+          @if (!isLoading) {
+            <div class="chart-container">
+              <ngx-charts-bar-vertical
+                [view]="view"
+                [scheme]="colorScheme"
+                [results]="collageCreationData"
+                [gradient]="gradient"
+                [xAxis]="showXAxis"
+                [yAxis]="showYAxis"
+                [legend]="false"
+                [showXAxisLabel]="showXAxisLabel"
+                [showYAxisLabel]="showYAxisLabel"
+                [xAxisLabel]="'תאריך'"
+                [yAxisLabel]="'מספר קולאז\'ים'"
+                (window:resize)="onResize($event)"
+              >
+              </ngx-charts-bar-vertical>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+    
+    <!-- פעילות אחרונה -->
+    <div class="recent-activity-card">
+      <div class="card-header">
+        <h2>פעילות אחרונה</h2>
+      </div>
+      
+      <div class="card-content">
+        <div class="activity-list">
+          @for (activity of recentActivities; track activity.id) {
+            <div class="activity-item">
+              <div class="activity-icon" [ngClass]="activity.type">
+                <i class="feather-icon" [ngClass]="getActivityIcon(activity.type)"></i>
+              </div>
+              <div class="activity-details">
+                <div class="activity-user">{{ activity.userName }}</div>
+                <div class="activity-description">{{ activity.description }}</div>
+                <div class="activity-time">{{ activity.timestamp | date:'dd/MM/yyyy HH:mm' }}</div>
+              </div>
+            </div>
+          }
+          
+          @if (recentActivities.length === 0) {
+            <div class="empty-state">
+              <p>אין פעילות אחרונה להצגה</p>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  </div>

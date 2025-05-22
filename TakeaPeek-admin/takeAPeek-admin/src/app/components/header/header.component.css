@@ -1,0 +1,132 @@
+.header {
+    height: 64px;
+    background-color: white;
+    border-bottom: 1px solid #e2e8f0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    direction: rtl;
+  }
+  
+  .right-section {
+    display: flex;
+    align-items: center;
+    
+    .menu-toggle {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 20px;
+      margin-left: 16px;
+      color: #64748b;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px;
+      border-radius: 4px;
+      
+      &:hover {
+        background-color: #f1f5f9;
+      }
+    }
+    
+    .page-title {
+      h1 {
+        font-size: 18px;
+        font-weight: 600;
+        color: #334155;
+        margin: 0;
+      }
+    }
+  }
+  
+  .left-section {
+    display: flex;
+    align-items: center;
+    
+    .search-bar {
+      position: relative;
+      margin-left: 16px;
+      
+      i {
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #94a3b8;
+        font-size: 16px;
+      }
+      
+      input {
+        background-color: #f1f5f9;
+        border: none;
+        border-radius: 4px;
+        padding: 8px 12px 8px 36px;
+        font-size: 14px;
+        width: 240px;
+        
+        &:focus {
+          outline: none;
+          background-color: #e2e8f0;
+        }
+        
+        &::placeholder {
+          color: #94a3b8;
+        }
+      }
+    }
+    
+    .header-actions {
+      display: flex;
+      align-items: center;
+      
+      .action-button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 20px;
+        color: #64748b;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 8px;
+        border-radius: 4px;
+        margin-right: 8px;
+        position: relative;
+        
+        &:hover {
+          background-color: #f1f5f9;
+        }
+        
+        .notification-badge {
+          position: absolute;
+          top: 4px;
+          right: 4px;
+          background-color: #ef4444;
+          color: white;
+          font-size: 10px;
+          font-weight: 600;
+          width: 16px;
+          height: 16px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+      }
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .header {
+      padding: 0 16px;
+    }
+    
+    .left-section {
+      .search-bar {
+        display: none;
+      }
+    }
+  }

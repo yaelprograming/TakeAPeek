@@ -1,0 +1,209 @@
+<!-- <!-- <p>user-management works!</p>
+<div class="user-management">
+    <div class="page-header">
+        <h1>ניהול משתמשים</h1>
+        <button class="add-button" (click)="openUserForm()">
+            <i class="feather-icon icon-plus"></i>
+            הוסף משתמש
+        </button>
+    </div>
+
+    <div class="filters-bar">
+        <div class="search-box">
+            <i class="feather-icon icon-search"></i>
+            <input type="text" placeholder="חיפוש לפי שם או אימייל..." (input)="onSearchChange($event)">
+        </div>
+
+        <div class="role-filter">
+            <label>סינון לפי תפקיד:</label>
+            <select (change)="onRoleFilterChange($event)">
+                <option value="all">הכל</option>
+                <option value="Admin">מנהל</option>
+                <option value="Editor">עורך</option>
+                <option value="Viewer">צופה</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="users-table-container">
+        <div class="loading-spinner" @if="isLoading">
+            <div class="spinner"></div>
+            <span>טוען משתמשים...</span>
+        </div>
+
+        <table class="users-table" @if="!isLoading">
+            <thead>
+                <tr>
+                    <th>שם</th>
+                    <th>אימייל</th>
+                    <th>תפקיד</th>
+                    <th>פעולות</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (user of filteredUsers; track user.id) {
+                <tr>
+                    <td>{{ user.name }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>
+                        <span [class]="getRoleBadgeClass(user.roleName)">
+                            {{ user.roleName === 'Admin' ? 'מנהל' :
+                            user.roleName === 'Editor' ? 'עורך' : 'צופה' }}
+                        </span>
+                    </td>
+                    <td class="actions-cell">
+                        <button class="action-btn edit" (click)="openUserForm(user)" title="ערוך משתמש">
+                            <i class="feather-icon icon-edit-2"></i>
+                        </button>
+                        <button class="action-btn delete" (click)="deleteUser(user)" title="מחק משתמש">
+                            <i class="feather-icon icon-trash-2"></i>
+                        </button>
+                    </td>
+                </tr>
+                }
+
+                @if (filteredUsers.length === 0) {
+                <tr>
+                    <td colspan="4" class="empty-table">
+                        <div class="empty-message">
+                            <i class="feather-icon icon-users"></i>
+                            <p>לא נמצאו משתמשים</p>
+                        </div>
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    @if (showUserForm) {
+    <div class="user-form-overlay">
+        <div class="user-form-modal">
+            <div class="modal-header">
+                <h2>{{ selectedUser ? 'עריכת משתמש' : 'הוספת משתמש חדש' }}</h2>
+                <button class="close-button" (click)="closeUserForm()">
+                    <i class="feather-icon icon-x"></i>
+                </button>
+            </div>
+
+            <form [formGroup]="userForm" (ngSubmit)="saveUser()">
+                <div class="form-content">
+                    <div class="form-group">
+                        <label for="name">שם מלא</label>
+                        <input type="text" id="name" formControlName="name"
+                            [ngClass]="{'invalid': userForm.get('name')?.invalid && userForm.get('name')?.touched}">
+                        <div class="error-message" @if="userForm.get('name')?.invalid && userForm.get('name')?.touched">
+                            <span @if="userForm.get('name')?.errors?.['required']">שם הוא שדה חובה</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">אימייל</label>
+                        <input type="email" id="email" formControlName="email"
+                            [ngClass]="{'invalid': userForm.get('email')?.invalid && userForm.get('email')?.touched}">
+                        <div class="error-message"
+                            @if="userForm.get('email')?.invalid && userForm.get('email')?.touched">
+                            <span @if="userForm.get('email')?.errors?.['required']">אימייל הוא שדה חובה</span>
+                            <span @if="userForm.get('email')?.errors?.['email']">יש להזין כתובת אימייל תקינה</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">סיסמה {{ selectedUser ? '(השאר ריק לשמירת הסיסמה הקיימת)' : '' }}</label>
+                        <input type="password" id="password" formControlName="password"
+                            [ngClass]="{'invalid': userForm.get('password')?.invalid && userForm.get('password')?.touched}">
+                        <div class="error-message"
+                            @if="userForm.get('password')?.invalid && userForm.get('password')?.touched">
+                            <span @if="userForm.get('password')?.errors?.['required']">סיסמה היא שדה חובה</span>
+                            <span @if="userForm.get('password')?.errors?.['minlength']">הסיסמה חייבת להכיל לפחות 6
+                                תווים</span>
+                        </div>
+                    </div>
+
+
+                    <div class="form-actions">
+                        <button type="button" class="cancel-button" (click)="closeUserForm()">ביטול</button>
+                        <button type="submit" class="save-button" [disabled]="userForm.invalid">שמור</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    }
+</div> -->
+
+<!-- <div class="filters">
+    <mat-form-field appearance="fill">
+      <mat-label>תפקיד</mat-label>
+      <mat-select [(ngModel)]="filters.role" (selectionChange)="onFilterChange()">
+        <mat-option value="">הכל</mat-option>
+        <mat-option value="admin">Admin</mat-option>
+        <mat-option value="user">User</mat-option>
+      </mat-select>
+    </mat-form-field>
+  
+    <mat-form-field appearance="fill">
+      <mat-label>פעיל</mat-label>
+      <mat-select [(ngModel)]="filters.isActive" (selectionChange)="onFilterChange()">
+        <mat-option value="">הכל</mat-option>
+        <mat-option [value]="true">כן</mat-option>
+        <mat-option [value]="false">לא</mat-option>
+      </mat-select>
+    </mat-form-field>
+  
+    <input type="file" (change)="importUsers($event)" />
+    <button mat-button color="primary" (click)="exportUsers()">ייצוא</button>
+  </div>
+  
+  <table mat-table [dataSource]="users" class="mat-elevation-z8">
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef> ID </th>
+      <td mat-cell *matCellDef="let user"> {{ user.id }} </td>
+    </ng-container>
+  
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef (click)="onSort('name')"> שם </th>
+      <td mat-cell *matCellDef="let user"> {{ user.name }} </td>
+    </ng-container>
+  
+    <ng-container matColumnDef="email">
+      <th mat-header-cell *matHeaderCellDef (click)="onSort('email')"> אימייל </th>
+      <td mat-cell *matCellDef="let user"> {{ user.email }} </td>
+    </ng-container>
+  
+    <ng-container matColumnDef="role">
+      <th mat-header-cell *matHeaderCellDef> תפקיד </th>
+      <td mat-cell *matCellDef="let user"> {{ user.role }} </td>
+    </ng-container>
+  
+    <ng-container matColumnDef="isActive">
+      <th mat-header-cell *matHeaderCellDef> פעיל </th>
+      <td mat-cell *matCellDef="let user"> {{ user.isActive ? 'כן' : 'לא' }} </td>
+    </ng-container>
+  
+    <ng-container matColumnDef="createdAt">
+      <th mat-header-cell *matHeaderCellDef> נוצר בתאריך </th>
+      <td mat-cell *matCellDef="let user"> {{ user.createdAt | date:'short' }} </td>
+    </ng-container>
+  
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef> פעולות </th>
+      <td mat-cell *matCellDef="let user">
+        <button mat-icon-button color="accent" (click)="editUser(user)">
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button mat-icon-button color="warn" (click)="deleteUser(user.id)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+  
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+  
+  <mat-paginator [length]="totalUsers"
+                 [pageSize]="pageSize"
+                 [pageSizeOptions]="[5, 10, 20]"
+                 (page)="onPageChange($event)">
+  </mat-paginator>  -->
