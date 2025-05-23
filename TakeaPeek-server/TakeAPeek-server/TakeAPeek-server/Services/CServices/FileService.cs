@@ -229,6 +229,7 @@
 //    }
 //}
 
+using Amazon;
 using Amazon.S3;
 using Amazon.S3.Model;
 using Microsoft.AspNetCore.DataProtection.KeyManagement.Internal;
@@ -247,11 +248,25 @@ namespace TakeAPeek_server.Services.CServices
         private string bucketName;
 
 
+
         public FileService(DataContext context, IAmazonS3 s3Client, IConfiguration configuration)
         {
-            _s3Client = s3Client;
+            var awsAccessKey = Environment.GetEnvironmentVariable("AWS_ACCESS_KEY_ID");
+            var awsSecretKey = Environment.GetEnvironmentVariable("AWS_SECRET_ACCESS_KEY");
+            var region = RegionEndpoint.GetBySystemName(Environment.GetEnvironmentVariable("AWS_REGION"));
+
+            var config = new AmazonS3Config
+            {
+                RegionEndpoint = region,
+                Timeout = TimeSpan.FromMinutes(10),
+                ReadWriteTimeout = TimeSpan.FromMinutes(10)
+            };
+
+            _s3Client = new AmazonS3Client(awsAccessKey, awsSecretKey, config);
             _context = context;
             bucketName = configuration["AWS_BUCKET_NAME"];
+
+
         }
         public async Task<File> GetFile(int id) => await _context.Files.Where(f => f.Id == id && !f.IsDeleted).FirstOrDefaultAsync();
 
@@ -339,9 +354,14 @@ namespace TakeAPeek_server.Services.CServices
 
             return response.ResponseStream; // מחזיר את הזרם של הקובץ
         }
-    
+
         public async Task<File> UploadFileToS3(File file, Stream fileStream)
         {
+
+            Console.WriteLine("Key: " + Environment.GetEnvironmentVariable("AWS_ACCESS_KEY_ID"));
+            Console.WriteLine("Secret: " + Environment.GetEnvironmentVariable("AWS_SECRET_ACCESS_KEY"));
+            Console.WriteLine("Region: " + Environment.GetEnvironmentVariable("AWS_REGION"));
+
             if (string.IsNullOrEmpty(bucketName))
             {
                 throw new Exception("Bucket name is not configured.");
@@ -349,7 +369,7 @@ namespace TakeAPeek_server.Services.CServices
 
             // יצירת שם ייחודי לקובץ ב-S3
             string fileKey = $"{file.FolderId}/{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
-            
+
             try
             {
                 // העלאת הקובץ ל-S3
@@ -438,7 +458,7 @@ namespace TakeAPeek_server.Services.CServices
             return Results.Ok(new { Url = presignedUrl });
         }
 
-     
+
         //בשביל הורדת תיקיה
 
         public async Task<byte[]> GetFileContent(int fileId)
@@ -456,6 +476,22 @@ namespace TakeAPeek_server.Services.CServices
             using var memoryStream = new MemoryStream();
             await response.ResponseStream.CopyToAsync(memoryStream);
             return memoryStream.ToArray();
+        }
+
+        //נסיון!
+        public async Task UploadTest()
+        {
+            var client = new AmazonS3Client("YOUR_KEY", "YOUR_SECRET", RegionEndpoint.USEast1);
+
+            var putRequest = new PutObjectRequest
+            {
+                BucketName = "664133766426takeapeek",
+                Key = "test.txt",
+                ContentBody = "Hello from test",
+                ContentType = "text/plain"
+            };
+
+            await client.PutObjectAsync(putRequest);
         }
 
     }

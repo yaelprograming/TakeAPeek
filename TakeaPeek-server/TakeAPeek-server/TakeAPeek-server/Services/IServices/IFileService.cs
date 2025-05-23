@@ -35,6 +35,8 @@ namespace TakeAPeek_server.Services.IServices
         Task<File> UploadFileToS3(File file, Stream fileStream);
         IResult GetPresignedUrl(string s3Key);
         Task<byte[]> GetFileContent(int fileId);
+        Task UploadTest();
+
     }
 }
 

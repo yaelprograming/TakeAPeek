@@ -14,6 +14,7 @@ using DotNetEnv; // Add this line
 using Amazon.Extensions.NETCore.Setup;
 using Microsoft.AspNetCore.Builder;
 using TakeAPeek_server.Services.CServices.TakeAPeek_server.Services;
+using TakeAPeek_server.Services;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -69,7 +70,7 @@ builder.Services.AddScoped<IUserRoleService,UserRoleService>();
 builder.Services.AddScoped<IS3Service, S3Service>();
 builder.Services.AddScoped<IAIService, AIService>();
 builder.Services.AddScoped<IImageAnalysisService, ImageAnalysisService>();
-
+builder.Services.AddScoped<IEventService, EventService>();
 
 Console.WriteLine($"AWS Region: {builder.Configuration["AWS:Region"]}");
 Console.WriteLine($"AWS Access Key ID: {builder.Configuration["AWS:AccessKeyId"]}");
@@ -152,6 +153,6 @@ CollageEndpoints.MapCollageEndpoints(app);
 AuthEndpoints.MapAuthEndpoints(app);
 UserEndpoints.MapUserEndpoints(app);
 AIEndpoints.MapAIEndpoints(app);
-
+EventEndpoints.MapEventEndpoints(app);
 app.Run();
 

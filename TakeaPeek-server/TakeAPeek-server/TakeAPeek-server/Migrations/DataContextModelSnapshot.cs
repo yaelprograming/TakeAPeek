@@ -42,7 +42,7 @@ namespace TakeAPeek_server.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Collages");
+                    b.ToTable("Collages", (string)null);
                 });
 
             modelBuilder.Entity("TakeAPeek_server.Entities.File", b =>
@@ -53,17 +53,8 @@ namespace TakeAPeek_server.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<bool>("AnalysisCompletedIs")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Category")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
-
-                    b.Property<bool?>("EyesClosed")
-                        .HasColumnType("bit");
 
                     b.Property<string>("FileName")
                         .IsRequired()
@@ -76,19 +67,10 @@ namespace TakeAPeek_server.Migrations
                     b.Property<int?>("FolderId")
                         .HasColumnType("int");
 
-                    b.Property<bool?>("IsBlurry")
-                        .HasColumnType("bit");
-
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<bool?>("IsOutdoor")
-                        .HasColumnType("bit");
-
                     b.Property<int>("OwnerId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("PeopleCount")
                         .HasColumnType("int");
 
                     b.Property<string>("S3Key")
@@ -103,7 +85,7 @@ namespace TakeAPeek_server.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Files");
+                    b.ToTable("Files", (string)null);
                 });
 
             modelBuilder.Entity("TakeAPeek_server.Entities.Folder", b =>
@@ -135,7 +117,7 @@ namespace TakeAPeek_server.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Folders");
+                    b.ToTable("Folders", (string)null);
                 });
 
             modelBuilder.Entity("TakeAPeek_server.Entities.Role", b =>
@@ -162,7 +144,7 @@ namespace TakeAPeek_server.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Roles");
+                    b.ToTable("Roles", (string)null);
                 });
 
             modelBuilder.Entity("TakeAPeek_server.Entities.Tag", b =>
@@ -179,7 +161,7 @@ namespace TakeAPeek_server.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Tags");
+                    b.ToTable("Tags", (string)null);
                 });
 
             modelBuilder.Entity("TakeAPeek_server.Entities.User", b =>
@@ -214,7 +196,7 @@ namespace TakeAPeek_server.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("TakeAPeek_server.Entities.UserRole", b =>
@@ -237,7 +219,7 @@ namespace TakeAPeek_server.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserRoles");
+                    b.ToTable("UserRoles", (string)null);
                 });
 
             modelBuilder.Entity("TakeAPeek_server.Entities.UserRole", b =>
