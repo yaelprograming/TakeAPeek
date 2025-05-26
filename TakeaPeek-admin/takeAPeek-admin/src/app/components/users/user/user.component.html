@@ -1,21 +1,22 @@
-<p>user works!</p>
 <div class="users-container">
     <!-- Header with Stats -->
     <div class="stats-section">
-      <mat-card class="stat-card" *ngFor="let stat of statsCards">
-        <mat-card-content>
-          <div class="stat-content">
-            <div class="stat-icon" [ngClass]="stat.class">
-              <mat-icon>{{stat.icon}}</mat-icon>
-            </div>
-            <div class="stat-details">
-              <h3>{{stat.value}}</h3>
-              <p>{{stat.label}}</p>
-            </div>
-          </div>
-        </mat-card-content>
-      </mat-card>
-    </div>
+        @for (stat of statsCards; track stat) {
+          <mat-card class="stat-card">
+            <mat-card-content>
+              <div class="stat-content">
+                <div class="stat-icon" [ngClass]="stat.class">
+                  <mat-icon>{{ stat.icon }}</mat-icon>
+                </div>
+                <div class="stat-details">
+                  <h3>{{ stat.value }}</h3>
+                  <p>{{ stat.label }}</p>
+                </div>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        }
+      </div>
 
     <!-- Main Content -->
     <mat-card class="main-card">
@@ -56,48 +57,147 @@
       </mat-card-header>
 
       <!-- Filters Section -->
-      <div class="filters-section">
-        <div class="search-filters">
-          <mat-form-field appearance="outline" class="search-field">
-            <mat-label>חיפוש משתמשים</mat-label>
-            <input matInput [formControl]="searchControl" placeholder="שם, אימייל או מחלקה...">
-            <mat-icon matSuffix>search</mat-icon>
-          </mat-form-field>
-
-          <mat-form-field appearance="outline" class="filter-field">
-            <mat-label>תפקיד</mat-label>
-            <mat-select [formControl]="roleFilter" multiple>
-              <mat-option value="Admin">מנהל</mat-option>
-              <mat-option value="Editor">עורך</mat-option>
-              <mat-option value="Viewer">צופה</mat-option>
-            </mat-select>
-          </mat-form-field>
-
-          <mat-form-field appearance="outline" class="filter-field">
-            <mat-label>מחלקה</mat-label>
-            <mat-select [formControl]="departmentFilter">
-              <mat-option value="">הכל</mat-option>
-              <mat-option value="Photography">צילום</mat-option>
-              <mat-option value="Marketing">שיווק</mat-option>
-              <mat-option value="IT">מחשוב</mat-option>
-              <mat-option value="Management">הנהלה</mat-option>
-            </mat-select>
-          </mat-form-field>
-
-          <mat-form-field appearance="outline" class="filter-field">
-            <mat-label>סטטוס</mat-label>
-            <mat-select [formControl]="statusFilter">
-              <mat-option value="">הכל</mat-option>
-              <mat-option value="true">פעיל</mat-option>
-              <mat-option value="false">לא פעיל</mat-option>
-            </mat-select>
-          </mat-form-field>
-
-          <button mat-icon-button (click)="clearFilters()" matTooltip="נקה מסננים">
-            <mat-icon>clear</mat-icon>
-          </button>
-        </div>
-
+             <!-- Filters Section - עיצוב חדש ומשופר -->
+        <div class="filters-section">
+            <div class="search-container">
+              <div class="search-header">
+                <h3>
+                  <mat-icon>search</mat-icon>
+                  חיפוש וסינון
+                </h3>
+                <button mat-icon-button (click)="clearFilters()" matTooltip="נקה הכל" class="clear-btn">
+                  <mat-icon>clear_all</mat-icon>
+                </button>
+              </div>
+  
+              <div class="search-grid">
+                <!-- חיפוש ראשי -->
+                <div class="search-main">
+                  <mat-form-field appearance="outline" class="search-field">
+                    <mat-label>חיפוש משתמשים</mat-label>
+                    <input matInput [formControl]="searchControl" 
+                           placeholder="שם, אימייל, טלפון או מחלקה..."
+                           (keyup.enter)="loadUsers()">
+                    <mat-icon matSuffix class="search-icon">search</mat-icon>
+                    @if (searchControl.value) {
+                      <button matSuffix mat-icon-button (click)="searchControl.setValue(''); loadUsers()" 
+                              class="clear-search-btn">
+                        <mat-icon>close</mat-icon>
+                      </button>
+                    }
+                  </mat-form-field>
+                  
+                  @if (searchControl.value && searchControl.value.trim()) {
+                    <div class="search-indicator">
+                      <mat-chip color="primary" selected>
+                        <mat-icon>search</mat-icon>
+                        מחפש: "{{searchControl.value}}"
+                      </mat-chip>
+                    </div>
+                  }
+                </div>
+  
+                <!-- מסננים -->
+                <div class="filters-grid">
+                  <mat-form-field appearance="outline" class="filter-field">
+                    <!-- <mat-label>תפקיד</mat-label> -->
+                    <mat-select     placeholder="תפקיד"
+                    [formControl]="roleFilter" multiple>
+                      <mat-option value="Admin">
+                        <mat-icon>admin_panel_settings</mat-icon>
+                        מנהל
+                      </mat-option>
+                      <mat-option value="Editor">
+                        <mat-icon>edit</mat-icon>
+                        עורך
+                      </mat-option>
+                      <mat-option value="Viewer">
+                        <mat-icon>visibility</mat-icon>
+                        צופה
+                      </mat-option>
+                    </mat-select>
+                    @if (roleFilter.value && roleFilter.value.length > 0) {
+                      <mat-hint>{{roleFilter.value.length}} נבחרו</mat-hint>
+                    }
+                  </mat-form-field>
+  
+                  <mat-form-field appearance="outline" class="filter-field">
+                    <mat-label>מחלקה</mat-label>
+                    <mat-select [formControl]="departmentFilter">
+                      <mat-option value="">הכל</mat-option>
+                      <mat-option value="Photography">
+                        <mat-icon>camera_alt</mat-icon>
+                        צילום
+                      </mat-option>
+                      <mat-option value="Marketing">
+                        <mat-icon>campaign</mat-icon>
+                        שיווק
+                      </mat-option>
+                      <mat-option value="IT">
+                        <mat-icon>computer</mat-icon>
+                        מחשוב
+                      </mat-option>
+                      <mat-option value="Management">
+                        <mat-icon>business</mat-icon>
+                        הנהלה
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+  
+                  <mat-form-field appearance="outline" class="filter-field">
+                    <mat-label>סטטוס</mat-label>
+                    <mat-select [formControl]="statusFilter">
+                      <mat-option value="">הכל</mat-option>
+                      <mat-option value="true">
+                        <mat-icon>check_circle</mat-icon>
+                        פעיל
+                      </mat-option>
+                      <mat-option value="false">
+                        <mat-icon>cancel</mat-icon>
+                        לא פעיל
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+  
+                <!-- תוצאות חיפוש -->
+                @if (!isLoading && (searchControl.value || roleFilter.value?.length || departmentFilter.value || statusFilter.value)) {
+                  <div class="search-results">
+                    <mat-chip-set>
+                      <mat-chip color="accent" selected>
+                        <mat-icon>filter_list</mat-icon>
+                        נמצאו {{totalUsers}} תוצאות
+                      </mat-chip>
+                      @if (searchControl.value) {
+                        <mat-chip removable (removed)="searchControl.setValue(''); loadUsers()">
+                          חיפוש: {{searchControl.value}}
+                          <mat-icon matChipRemove>cancel</mat-icon>
+                        </mat-chip>
+                      }
+                      @if (roleFilter.value && roleFilter.value.length > 0) {
+                        <mat-chip removable (removed)="roleFilter.setValue([]); loadUsers()">
+                          תפקידים: {{roleFilter.value.length}}
+                          <mat-icon matChipRemove>cancel</mat-icon>
+                        </mat-chip>
+                      }
+                      @if (departmentFilter.value) {
+                        <mat-chip removable (removed)="departmentFilter.setValue(''); loadUsers()">
+                          מחלקה: {{departmentFilter.value}}
+                          <mat-icon matChipRemove>cancel</mat-icon>
+                        </mat-chip>
+                      }
+                      @if (statusFilter.value) {
+                        <mat-chip removable (removed)="statusFilter.setValue(''); loadUsers()">
+                          סטטוס: {{statusFilter.value === 'true' ? 'פעיל' : 'לא פעיל'}}
+                          <mat-icon matChipRemove>cancel</mat-icon>
+                        </mat-chip>
+                      }
+                    </mat-chip-set>
+                  </div>
+                }
+              </div>
+            </div>
+  
         <!-- Bulk Actions -->
         @if (selection.selected.length > 0) {
           <div class="bulk-actions">
@@ -148,7 +248,7 @@
               </ng-container>
 
               <!-- Avatar Column -->
-              <ng-container matColumnDef="avatar">
+              <!-- <ng-container matColumnDef="avatar">
                 <th mat-header-cell *matHeaderCellDef>תמונה</th>
                 <td mat-cell *matCellDef="let user">
                   <div class="user-avatar">
@@ -162,7 +262,7 @@
                     <div class="status-indicator" [ngClass]="{'active': user.isActive, 'inactive': !user.isActive}"></div>
                   </div>
                 </td>
-              </ng-container>
+              </ng-container> -->
 
               <!-- Name Column -->
               <ng-container matColumnDef="name">
@@ -256,7 +356,6 @@
                             matTooltip="עריכה">
                       <mat-icon>edit</mat-icon>
                     </button>
-                    
                     <button mat-icon-button [matMenuTriggerFor]="userMenu" matTooltip="עוד פעולות">
                       <mat-icon>more_vert</mat-icon>
                     </button>
@@ -307,3 +406,4 @@
       </mat-card-content>
     </mat-card>
   </div>
+

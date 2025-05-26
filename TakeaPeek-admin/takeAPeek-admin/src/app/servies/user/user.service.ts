@@ -1,5 +1,3 @@
-
-
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { forkJoin, map, Observable, switchMap } from 'rxjs';
@@ -100,23 +98,96 @@ export class UserService {
     return this.http.post(`${this.apiUrl}/import`, formData);
   }
 ////חדש!!!!!
+// getAllUsers(filters?: UserFilters): Observable<PaginatedUsers> {
+//   console.log("getAllUsers")
+//   let params = new HttpParams()
+
+//   if (filters) {
+//     if (filters.search) params = params.set("search", filters.search)
+//     if (filters.role) params = params.set("role", filters.role)
+//     if (filters.isActive !== undefined) params = params.set("isActive", filters.isActive.toString())
+//     if (filters.department) params = params.set("department", filters.department)
+//     if (filters.sortBy) params = params.set("sortBy", filters.sortBy)
+//     if (filters.sortDirection) params = params.set("sortDirection", filters.sortDirection)
+//     if (filters.page) params = params.set("page", filters.page.toString())
+//     if (filters.limit) params = params.set("limit", filters.limit.toString())
+//   }
+
+//   console.log("getAllUsers-after")
+
+//  var data= this.http.get<PaginatedUsers>(this.apiUrl, { params })
+//  console.log("data",data)
+//  return data
+// }
+
 getAllUsers(filters?: UserFilters): Observable<PaginatedUsers> {
-  let params = new HttpParams()
+  // במקום לקרוא ל-applyClientSideFilters, נעשה את הסינון כאן
+  return this.http.get<User[]>(this.apiUrl).pipe(
+    map((users) => {
+      let filteredUsers = [...users]
 
-  if (filters) {
-    if (filters.search) params = params.set("search", filters.search)
-    if (filters.role) params = params.set("role", filters.role)
-    if (filters.isActive !== undefined) params = params.set("isActive", filters.isActive.toString())
-    if (filters.department) params = params.set("department", filters.department)
-    if (filters.sortBy) params = params.set("sortBy", filters.sortBy)
-    if (filters.sortDirection) params = params.set("sortDirection", filters.sortDirection)
-    if (filters.page) params = params.set("page", filters.page.toString())
-    if (filters.limit) params = params.set("limit", filters.limit.toString())
-  }
+      if (filters) {
+        // חיפוש טקסט - זה החלק שלא עבד!
+        if (filters.search && filters.search.trim()) {
+          const searchTerm = filters.search.toLowerCase().trim()
+          filteredUsers = filteredUsers.filter(
+            (user) =>
+              user.name.toLowerCase().includes(searchTerm) ||
+              user.email.toLowerCase().includes(searchTerm) ||
+              (user.department && user.department.toLowerCase().includes(searchTerm)) ||
+              (user.phoneNumber && user.phoneNumber.includes(searchTerm)),
+          )
+        }
 
-  return this.http.get<PaginatedUsers>(`${this.apiUrl}/users`, { params })
+        // סינון לפי תפקיד
+        if (filters.role && filters.role.length > 0) {
+          const roles = Array.isArray(filters.role) ? filters.role : filters.role.split(",")
+          filteredUsers = filteredUsers.filter((user) => roles.includes(user.role))
+        }
+
+        // סינון לפי מחלקה
+        if (filters.department && filters.department.trim()) {
+          filteredUsers = filteredUsers.filter((user) => user.department === filters.department)
+        }
+
+        // סינון לפי סטטוס
+        if (filters.isActive !== undefined) {
+          filteredUsers = filteredUsers.filter((user) => user.isActive === filters.isActive)
+        }
+
+        // מיון
+        if (filters.sortBy) {
+          filteredUsers.sort((a, b) => {
+            const aValue = a[filters.sortBy as keyof User] as any
+            const bValue = b[filters.sortBy as keyof User] as any
+
+            if (aValue === null || aValue === undefined) return 1
+            if (bValue === null || bValue === undefined) return -1
+
+            if (filters.sortDirection === "desc") {
+              return bValue > aValue ? 1 : -1
+            }
+            return aValue > bValue ? 1 : -1
+          })
+        }
+      }
+
+      // Pagination
+      const page = filters?.page || 1
+      const limit = filters?.limit || 25
+      const startIndex = (page - 1) * limit
+      const endIndex = startIndex + limit
+      const paginatedUsers = filteredUsers.slice(startIndex, endIndex)
+
+      return {
+        users: paginatedUsers,
+        total: filteredUsers.length,
+        page: page,
+        totalPages: Math.ceil(filteredUsers.length / limit),
+      }
+    }),
+  )
 }
-
 getUser(id: number): Observable<User> {
   return this.http.get<User>(`${this.apiUrl}/${id}`)
 }
@@ -162,10 +233,10 @@ exportUsers(format: "excel" | "csv"): Observable<Blob> {
   return this.http.get<User[]>(this.apiUrl).pipe(map((users) => this.createExportFile(users, format)))
 }
 
-uploadAvatar(userId: number, file: File): Observable<User> {
-  // אם אין endpoint, פשוט נחזיר את המשתמש כמו שהוא
-  return this.getUser(userId)
-}
+// uploadAvatar(userId: number, file: File): Observable<User> {
+//   // אם אין endpoint, פשוט נחזיר את המשתמש כמו שהוא
+//   return this.getUser(userId)
+// }
 
 private applyClientSideFilters(users: User[], filters?: UserFilters): PaginatedUsers {
   let filteredUsers = [...users]
@@ -296,10 +367,6 @@ private createExportFile(users: User[], format: "excel" | "csv"): Blob {
   return new Blob([htmlContent], { type: "application/vnd.ms-excel" })
 }
 
-
 }
-
-
-
 
 

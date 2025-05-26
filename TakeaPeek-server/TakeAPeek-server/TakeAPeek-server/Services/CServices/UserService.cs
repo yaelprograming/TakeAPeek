@@ -112,12 +112,9 @@ namespace TakeAPeek_server.Services.CServices
 //        {
 //            UserId = user.Id,
 //            RoleId = role.Id
-//        };
-
-//        _context.UserRoles.Add(userRole);
+//        };//        _context.UserRoles.Add(userRole);
 //        await _context.SaveChangesAsync();
 //    }
-
 //    return user;
 //}
 

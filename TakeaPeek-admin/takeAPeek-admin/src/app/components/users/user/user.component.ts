@@ -20,8 +20,8 @@ import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { User, UserStats } from '../../../models/user';
-import { UserFilters, UserService } from '../../../servies/user/user.service';
-import { debounceTime, distinctUntilChanged } from 'rxjs';
+import { PaginatedUsers, UserFilters, UserService } from '../../../servies/user/user.service';
+import { debounceTime, distinctUntilChanged, filter } from 'rxjs';
 import { UserDialogComponent } from '../user-dialog/user-dialog.component';
 import { MatDividerModule } from '@angular/material/divider';
 
@@ -53,11 +53,11 @@ import { MatDividerModule } from '@angular/material/divider';
 export class UserComponent implements OnInit{
   @ViewChild(MatPaginator) paginator!: MatPaginator
   @ViewChild(MatSort) sort!: MatSort
-  users: User[] = []
+  users: any
   dataSource = new MatTableDataSource<User>([])
   selection = new SelectionModel<User>(true, [])
 
-  displayedColumns: string[] = ["select", "avatar", "name", "email", "role", "stats", "lastLogin", "status", "actions"]
+  displayedColumns: string[] = ["select", "name", "email", "role", "stats", "lastLogin", "status", "actions"]
 
   // Form Controls
   searchControl = new FormControl("")
@@ -101,6 +101,7 @@ export class UserComponent implements OnInit{
   }
 
   private setupFilters(): void {
+    console.log("filter")
     // Search filter
     this.searchControl.valueChanges.pipe(debounceTime(300), distinctUntilChanged()).subscribe(() => this.loadUsers())
 
@@ -113,16 +114,25 @@ export class UserComponent implements OnInit{
   loadUsers(): void {
     this.isLoading = true
 
+    // כאן הבעיה הייתה! צריך לקרוא לערכים נכון
+    const searchValue = this.searchControl.value?.trim() || ""
+    const roleValue = this.roleFilter.value || []
+    const departmentValue = this.departmentFilter.value || ""
+    const statusValue = this.statusFilter.value
+
     const filters: UserFilters = {
-      search: this.searchControl.value || undefined,
-      role: this.roleFilter.value?.length ? this.roleFilter.value.join(",") : undefined,
-      department: this.departmentFilter.value || undefined,
-      isActive: this.statusFilter.value ? this.statusFilter.value === "true" : undefined,
+      search: searchValue || undefined,
+      role: roleValue.length > 0 ? roleValue.join(",") : undefined,
+      department: departmentValue || undefined,
+      isActive: statusValue ? statusValue === "true" : undefined,
       page: this.currentPage + 1,
       limit: this.pageSize,
       sortBy: this.sort?.active || "createdAt",
       sortDirection: this.sort?.direction || "desc",
     }
+
+    console.log("Filters being sent:", filters) // לדיבוג
+
     this.userService.getAllUsers(filters).subscribe({
       next: (response) => {
         this.users = response.users
@@ -130,6 +140,8 @@ export class UserComponent implements OnInit{
         this.totalUsers = response.total
         this.isLoading = false
         this.selection.clear()
+
+        console.log("Filtered users received:", response.users.length) // לדיבוג
       },
       error: (error) => {
         this.isLoading = false
@@ -138,6 +150,7 @@ export class UserComponent implements OnInit{
     })
   }
   loadStats(): void {
+    console.log("loadStats")
     this.userService.getUserStats().subscribe({
       next: (stats) => {
         this.userStats = stats
@@ -251,7 +264,7 @@ export class UserComponent implements OnInit{
   toggleUserStatus(user: User): void {
     this.userService.toggleUserStatus(user.id).subscribe({
       next: (updatedUser) => {
-        const index = this.users.findIndex((u) => u.id === user.id)
+        const index = this.users.findIndex((u: User) => u.id === user.id)
         if (index !== -1) {
           this.users[index] = updatedUser
           this.dataSource.data = [...this.users]
