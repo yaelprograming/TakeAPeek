@@ -158,8 +158,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { NgxChartsModule, ScaleType } from '@swimlane/ngx-charts';
-import { AnalyticsService } from '../../servies/analytics.service';
-
+import { AnalyticsService } from '../../servies/analytics/analytics.service';
 @Component({
   selector: 'app-analytics',
   standalone: true,

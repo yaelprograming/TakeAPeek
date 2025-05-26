@@ -5,9 +5,10 @@ import { AuthService } from '../../servies/auth/auth.service';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { DashboardComponent } from '../../dashboard/dashboard/dashboard.component';
+import { UserDialogComponent } from '../users/user-dialog/user-dialog.component';
 @Component({
   selector: 'app-login',
-  imports: [CommonModule, ReactiveFormsModule,HttpClientModule,DashboardComponent],
+  imports: [CommonModule, ReactiveFormsModule,HttpClientModule,DashboardComponent,UserDialogComponent],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
   standalone: true

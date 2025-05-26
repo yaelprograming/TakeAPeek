@@ -1,0 +1,309 @@
+<p>user works!</p>
+<div class="users-container">
+    <!-- Header with Stats -->
+    <div class="stats-section">
+      <mat-card class="stat-card" *ngFor="let stat of statsCards">
+        <mat-card-content>
+          <div class="stat-content">
+            <div class="stat-icon" [ngClass]="stat.class">
+              <mat-icon>{{stat.icon}}</mat-icon>
+            </div>
+            <div class="stat-details">
+              <h3>{{stat.value}}</h3>
+              <p>{{stat.label}}</p>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <!-- Main Content -->
+    <mat-card class="main-card">
+      <mat-card-header class="card-header">
+        <div class="header-content">
+          <div class="title-section">
+            <mat-card-title>
+              <mat-icon>people</mat-icon>
+              ניהול משתמשים
+              <mat-chip class="user-count-chip">{{totalUsers}} משתמשים</mat-chip>
+            </mat-card-title>
+            <mat-card-subtitle>ניהול משתמשי המערכת והרשאות</mat-card-subtitle>
+          </div>
+          
+          <div class="action-buttons">
+            <button mat-raised-button color="primary" (click)="openUserDialog()" class="add-user-btn">
+              <mat-icon>person_add</mat-icon>
+              הוסף משתמש
+            </button>
+            
+            <button mat-button [matMenuTriggerFor]="exportMenu" class="export-btn">
+              <mat-icon>download</mat-icon>
+              ייצא נתונים
+            </button>
+            
+            <mat-menu #exportMenu="matMenu">
+              <button mat-menu-item (click)="exportData('excel')">
+                <mat-icon>table_chart</mat-icon>
+                <span>Excel</span>
+              </button>
+              <button mat-menu-item (click)="exportData('csv')">
+                <mat-icon>description</mat-icon>
+                <span>CSV</span>
+              </button>
+            </mat-menu>
+          </div>
+        </div>
+      </mat-card-header>
+
+      <!-- Filters Section -->
+      <div class="filters-section">
+        <div class="search-filters">
+          <mat-form-field appearance="outline" class="search-field">
+            <mat-label>חיפוש משתמשים</mat-label>
+            <input matInput [formControl]="searchControl" placeholder="שם, אימייל או מחלקה...">
+            <mat-icon matSuffix>search</mat-icon>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="filter-field">
+            <mat-label>תפקיד</mat-label>
+            <mat-select [formControl]="roleFilter" multiple>
+              <mat-option value="Admin">מנהל</mat-option>
+              <mat-option value="Editor">עורך</mat-option>
+              <mat-option value="Viewer">צופה</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="filter-field">
+            <mat-label>מחלקה</mat-label>
+            <mat-select [formControl]="departmentFilter">
+              <mat-option value="">הכל</mat-option>
+              <mat-option value="Photography">צילום</mat-option>
+              <mat-option value="Marketing">שיווק</mat-option>
+              <mat-option value="IT">מחשוב</mat-option>
+              <mat-option value="Management">הנהלה</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="filter-field">
+            <mat-label>סטטוס</mat-label>
+            <mat-select [formControl]="statusFilter">
+              <mat-option value="">הכל</mat-option>
+              <mat-option value="true">פעיל</mat-option>
+              <mat-option value="false">לא פעיל</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <button mat-icon-button (click)="clearFilters()" matTooltip="נקה מסננים">
+            <mat-icon>clear</mat-icon>
+          </button>
+        </div>
+
+        <!-- Bulk Actions -->
+        @if (selection.selected.length > 0) {
+          <div class="bulk-actions">
+            <mat-chip-set>
+              <mat-chip>
+                <mat-icon>check_circle</mat-icon>
+                {{selection.selected.length}} נבחרו
+              </mat-chip>
+            </mat-chip-set>
+            
+            <div class="bulk-buttons">
+              <button mat-button color="warn" (click)="deleteSelectedUsers()">
+                <mat-icon>delete</mat-icon>
+                מחק נבחרים
+              </button>
+              <button mat-button (click)="toggleSelectedUsersStatus()">
+                <mat-icon>toggle_on</mat-icon>
+                שנה סטטוס
+              </button>
+            </div>
+          </div>
+        }
+      </div>
+
+      <mat-card-content class="table-content">
+        @if (isLoading) {
+          <div class="loading-container">
+            <mat-spinner></mat-spinner>
+            <p>טוען משתמשים...</p>
+          </div>
+        } @else if (users.length > 0) {
+          <div class="table-container">
+            <table mat-table [dataSource]="dataSource" matSort class="users-table">
+              <!-- Checkbox Column -->
+              <ng-container matColumnDef="select">
+                <th mat-header-cell *matHeaderCellDef>
+                  <mat-checkbox (change)="$event ? toggleAllRows() : null"
+                                [checked]="selection.hasValue() && isAllSelected()"
+                                [indeterminate]="selection.hasValue() && !isAllSelected()">
+                  </mat-checkbox>
+                </th>
+                <td mat-cell *matCellDef="let user">
+                  <mat-checkbox (click)="$event.stopPropagation()"
+                                (change)="$event ? selection.toggle(user) : null"
+                                [checked]="selection.isSelected(user)">
+                  </mat-checkbox>
+                </td>
+              </ng-container>
+
+              <!-- Avatar Column -->
+              <ng-container matColumnDef="avatar">
+                <th mat-header-cell *matHeaderCellDef>תמונה</th>
+                <td mat-cell *matCellDef="let user">
+                  <div class="user-avatar">
+                    @if (user.avatar) {
+                      <img [src]="user.avatar" [alt]="user.name" class="avatar-img">
+                    } @else {
+                      <div class="avatar-placeholder">
+                        {{getInitials(user.name)}}
+                      </div>
+                    }
+                    <div class="status-indicator" [ngClass]="{'active': user.isActive, 'inactive': !user.isActive}"></div>
+                  </div>
+                </td>
+              </ng-container>
+
+              <!-- Name Column -->
+              <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>שם</th>
+                <td mat-cell *matCellDef="let user">
+                  <div class="user-info">
+                    <span class="user-name">{{user.name}}</span>
+                    @if (user.department) {
+                      <span class="user-department">{{user.department}}</span>
+                    }
+                  </div>
+                </td>
+              </ng-container>
+
+              <!-- Email Column -->
+              <ng-container matColumnDef="email">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>אימייל</th>
+                <td mat-cell *matCellDef="let user">
+                  <div class="email-cell">
+                    <span>{{user.email}}</span>
+                    @if (user.phoneNumber) {
+                      <small>{{user.phoneNumber}}</small>
+                    }
+                  </div>
+                </td>
+              </ng-container>
+
+              <!-- Role Column -->
+              <ng-container matColumnDef="role">
+                <th mat-header-cell *matHeaderCellDef>תפקיד</th>
+                <td mat-cell *matCellDef="let user">
+                  <mat-chip [color]="getRoleColor(user.role)" selected class="role-chip">
+                    <mat-icon>{{getRoleIcon(user.role)}}</mat-icon>
+                    {{getRoleLabel(user.role)}}
+                  </mat-chip>
+                </td>
+              </ng-container>
+
+              <!-- Stats Column -->
+              <ng-container matColumnDef="stats">
+                <th mat-header-cell *matHeaderCellDef>סטטיסטיקות</th>
+                <td mat-cell *matCellDef="let user">
+                  <div class="user-stats">
+                    <div class="stat-item" matTooltip="תמונות">
+                      <mat-icon>photo_library</mat-icon>
+                      <span>{{user.totalPhotos || 0}}</span>
+                    </div>
+                    <div class="stat-item" matTooltip="נפח אחסון">
+                      <mat-icon>storage</mat-icon>
+                      <span>{{formatStorage(user.storageUsed || 0)}}</span>
+                    </div>
+                  </div>
+                </td>
+              </ng-container>
+
+              <!-- Last Login Column -->
+              <ng-container matColumnDef="lastLogin">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>התחברות אחרונה</th>
+                <td mat-cell *matCellDef="let user">
+                  @if (user.lastLogin) {
+                    <div class="date-cell">
+                      <span>{{user.lastLogin | date:'dd/MM/yyyy'}}</span>
+                      <small>{{user.lastLogin | date:'HH:mm'}}</small>
+                    </div>
+                  } @else {
+                    <span class="no-login">לא התחבר</span>
+                  }
+                </td>
+              </ng-container>
+
+              <!-- Status Column -->
+              <ng-container matColumnDef="status">
+                <th mat-header-cell *matHeaderCellDef>סטטוס</th>
+                <td mat-cell *matCellDef="let user">
+                  <button mat-icon-button 
+                          [color]="user.isActive ? 'primary' : 'warn'"
+                          (click)="toggleUserStatus(user)"
+                          [matTooltip]="user.isActive ? 'השבת משתמש' : 'הפעל משתמש'">
+                    <mat-icon>{{user.isActive ? 'toggle_on' : 'toggle_off'}}</mat-icon>
+                  </button>
+                </td>
+              </ng-container>
+
+              <!-- Actions Column -->
+              <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef>פעולות</th>
+                <td mat-cell *matCellDef="let user">
+                  <div class="action-buttons">
+                    <button mat-icon-button color="primary" 
+                            (click)="editUser(user)"
+                            matTooltip="עריכה">
+                      <mat-icon>edit</mat-icon>
+                    </button>
+                    
+                    <button mat-icon-button [matMenuTriggerFor]="userMenu" matTooltip="עוד פעולות">
+                      <mat-icon>more_vert</mat-icon>
+                    </button>
+                    
+                    <mat-menu #userMenu="matMenu">
+                      <button mat-menu-item (click)="viewUserDetails(user)">
+                        <mat-icon>visibility</mat-icon>
+                        <span>צפה בפרטים</span>
+                      </button>
+                      <button mat-menu-item (click)="resetPassword(user)">
+                        <mat-icon>lock_reset</mat-icon>
+                        <span>איפוס סיסמה</span>
+                      </button>
+                      <mat-divider></mat-divider>
+                      <button mat-menu-item (click)="deleteUser(user)" class="delete-action">
+                        <mat-icon>delete</mat-icon>
+                        <span>מחיקה</span>
+                      </button>
+                    </mat-menu>
+                  </div>
+                </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;" 
+                  class="table-row"
+                  [class.selected-row]="selection.isSelected(row)"></tr>
+            </table>
+
+            <mat-paginator [pageSizeOptions]="[10, 25, 50, 100]"
+                           [pageSize]="pageSize"
+                           [length]="totalUsers"
+                           (page)="onPageChange($event)"
+                           showFirstLastButtons>
+            </mat-paginator>
+          </div>
+        } @else {
+          <div class="no-data">
+            <mat-icon>people_outline</mat-icon>
+            <h3>אין משתמשים במערכת</h3>
+            <p>הוסיפו משתמש ראשון כדי להתחיל</p>
+            <button mat-raised-button color="primary" (click)="openUserDialog()">
+              <mat-icon>add</mat-icon>
+              הוסף משתמש ראשון
+            </button>
+          </div>
+        }
+      </mat-card-content>
+    </mat-card>
+  </div>

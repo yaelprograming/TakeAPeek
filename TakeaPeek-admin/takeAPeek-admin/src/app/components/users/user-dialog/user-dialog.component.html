@@ -1,0 +1,130 @@
+<p>user-dialog works!</p>
+<div class="dialog-header">
+    <h2 mat-dialog-title>
+      <mat-icon>{{isEditMode ? 'edit' : 'person_add'}}</mat-icon>
+      {{isEditMode ? 'עריכת משתמש' : 'הוספת משתמש חדש'}}
+    </h2>
+    <button mat-icon-button mat-dialog-close class="close-button">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  
+  <mat-dialog-content class="dialog-content">
+    <form [formGroup]="userForm" class="user-form">
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>שם מלא</mat-label>
+          <input matInput formControlName="name" required>
+          <mat-icon matSuffix>person</mat-icon>
+          @if (userForm.get('name')?.invalid && userForm.get('name')?.touched) {
+            <mat-error>שם מלא נדרש</mat-error>
+          }
+        </mat-form-field>
+      </div>
+
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>אימייל</mat-label>
+          <input matInput type="email" formControlName="email" required>
+          <mat-icon matSuffix>email</mat-icon>
+          @if (userForm.get('email')?.invalid && userForm.get('email')?.touched) {
+            <mat-error>
+              @if (userForm.get('email')?.errors?.['required']) {
+                אימייל נדרש
+              } @else if (userForm.get('email')?.errors?.['email']) {
+                פורמט אימייל לא תקין
+              }
+            </mat-error>
+          }
+        </mat-form-field>
+      </div>
+
+      @if (!isEditMode) {
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>סיסמה</mat-label>
+            <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password" required>
+            <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" type="button">
+              <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </button>
+            @if (userForm.get('password')?.invalid && userForm.get('password')?.touched) {
+              <mat-error>סיסמה חייבת להכיל לפחות 6 תווים</mat-error>
+            }
+          </mat-form-field>
+        </div>
+      }
+
+      <div class="form-row two-columns">
+        <mat-form-field appearance="outline">
+          <mat-label>תפקיד</mat-label>
+          <mat-select formControlName="roleName" required>
+            <mat-option value="Admin">
+              <div class="role-option">
+                <mat-icon>admin_panel_settings</mat-icon>
+                <span>מנהל</span>
+              </div>
+            </mat-option>
+            <mat-option value="Editor">
+              <div class="role-option">
+                <mat-icon>edit</mat-icon>
+                <span>עורך</span>
+              </div>
+            </mat-option>
+            <mat-option value="Viewer">
+              <div class="role-option">
+                <mat-icon>visibility</mat-icon>
+                <span>צופה</span>
+              </div>
+            </mat-option>
+          </mat-select>
+          @if (userForm.get('roleName')?.invalid && userForm.get('roleName')?.touched) {
+            <mat-error>תפקיד נדרש</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>מחלקה</mat-label>
+          <mat-select formControlName="department">
+            <mat-option value="Photography">צילום</mat-option>
+            <mat-option value="Marketing">שיווק</mat-option>
+            <mat-option value="IT">מחשוב</mat-option>
+            <mat-option value="Management">הנהלה</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>מספר טלפון</mat-label>
+          <input matInput formControlName="phoneNumber" placeholder="050-1234567">
+          <mat-icon matSuffix>phone</mat-icon>
+        </mat-form-field>
+      </div>
+
+      @if (isEditMode) {
+        <div class="form-row">
+          <mat-slide-toggle formControlName="isActive" class="status-toggle">
+            <span class="toggle-label">
+              <mat-icon>{{userForm.get('isActive')?.value ? 'check_circle' : 'cancel'}}</mat-icon>
+              {{userForm.get('isActive')?.value ? 'משתמש פעיל' : 'משתמש לא פעיל'}}
+            </span>
+          </mat-slide-toggle>
+        </div>
+      }
+    </form>
+  </mat-dialog-content>
+
+  <mat-dialog-actions class="dialog-actions">
+    <button mat-button mat-dialog-close [disabled]="isLoading">
+      <mat-icon>cancel</mat-icon>
+      ביטול
+    </button>
+    <button mat-raised-button color="primary" (click)="save()" [disabled]="userForm.invalid || isLoading">
+      @if (isLoading) {
+        <mat-spinner diameter="20"></mat-spinner>
+      } @else {
+        <mat-icon>{{isEditMode ? 'save' : 'add'}}</mat-icon>
+      }
+      {{isEditMode ? 'עדכן' : 'הוסף'}}
+    </button>
+  </mat-dialog-actions>
