@@ -102,7 +102,7 @@ const HeroSection = () => {
         </Typography>
       </motion.div>
       <motion.img
-        src="img/logo.png"
+        src="img/TakeAPeelLogo.png"
         alt="Take a Peek"
         initial={{ scale: 0.8 }}
         animate={{ scale: 1 }}

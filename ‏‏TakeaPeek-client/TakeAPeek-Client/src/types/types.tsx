@@ -14,8 +14,9 @@ export type MyFile={
         fileType: string; // סוג הקובץ
         size: number; // גודל הקובץ
         s3Key: string; // מפתח ה-S3
-        IsDeleted:false|true|"false"|"true"|""
-        OwnerId:string
+        isDeleted:false|true
+        OwnerId:string,
+        isBlurry?: boolean
 }
 
 export type MyFolder= {
@@ -23,7 +24,7 @@ export type MyFolder= {
     name: string;
     s3Key: string; // מפתח ה-S3
     parentFolderId: string,
-        IsDeleted:false|true|"false"|"true"|""
+        isDeleted:false|true
         OwnerId:string
 
 }
@@ -114,4 +115,18 @@ export interface CollageImage {
         name: string
         value: number
       }
+
+      export interface Task {
+        id: string;
+        title: string;
+        description?: string;
+        location?: string;
+        startTime: string; // אם בשרת זה נקרא אחרת, למשל start_time
+        endTime: string;   // אם בשרת זה נקרא אחרת, למשל end_time
+        email?: string;
+        createdAt?: string;
+        updatedAt?: string;
+        userId: number;
+      }
+      
       

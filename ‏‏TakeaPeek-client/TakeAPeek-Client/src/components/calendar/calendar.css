@@ -1,0 +1,53 @@
+/* FullCalendar Customizations */
+.photographer-calendar .fc-toolbar-title {
+  font-size: 1.25rem !important;
+  font-weight: 700;
+  color: #7c3aed;
+}
+
+.photographer-calendar .fc-button-primary {
+  background-color: #8b5cf6 !important;
+  border-color: #7c3aed !important;
+}
+
+.photographer-calendar .fc-button-primary:hover {
+  background-color: #7c3aed !important;
+}
+
+.photographer-calendar .fc-button-primary:disabled {
+  background-color: #c4b5fd !important;
+  border-color: #a78bfa !important;
+}
+
+.photographer-calendar .fc-daygrid-day-number,
+.photographer-calendar .fc-col-header-cell-cushion {
+  color: #4b5563;
+  text-decoration: none !important;
+}
+
+.photographer-calendar .fc-daygrid-day.fc-day-today {
+  background-color: #f3e8ff !important;
+}
+
+.photographer-calendar .fc-event {
+  border-radius: 4px;
+  border: none;
+  padding: 1px;
+  cursor: pointer;
+}
+
+.photographer-calendar .fc-h-event .fc-event-main {
+  padding: 2px 4px;
+}
+
+.photographer-calendar .fc-daygrid-event-dot {
+  border-color: #8b5cf6;
+}
+
+.photographer-calendar .fc-list-event-dot {
+  border-color: #8b5cf6;
+}
+
+.photographer-calendar .fc-list-day-cushion {
+  background-color: #f3e8ff !important;
+}

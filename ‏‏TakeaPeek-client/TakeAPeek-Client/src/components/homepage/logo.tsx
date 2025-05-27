@@ -1,13 +1,15 @@
-import React from 'react';
-import yourLogo from './your-logo.png'; // Import your logo image
 import { SxProps, Theme } from '@mui/material/styles';
 
 interface LogoProps {
   sx?: SxProps<Theme>;
 }
 
+import { Box } from '@mui/material';
+
 function Logo({ sx }: LogoProps) {
-  return <img src="img/TakeAPeekLogo.png" alt="Logo" style={sx} />;
+  return (
+    <Box component="img" src="img/logo.png" alt="Logo" sx={sx} />
+  );
 }
 
 export default Logo;

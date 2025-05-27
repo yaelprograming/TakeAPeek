@@ -494,6 +494,8 @@ import UndoIcon from "@mui/icons-material/Undo"
 import RedoIcon from "@mui/icons-material/Redo"
 import { useTheme } from "@mui/material/styles"
 import { CollageImage, CollageText, Template, AspectRatio } from "../../types/types"
+import { EmojiEmotions } from "@mui/icons-material"
+import StickersTool from "./stickersTool"
 
 // Define filters
 const filters = [
@@ -505,7 +507,9 @@ const filters = [
   { id: "cool", name: "Cool" },
   { id: "dramatic", name: "Dramatic" },
 ]
-
+export interface StickersToolProps {
+  onAddSticker: (sticker: string, size: number) => void;
+}
 const CollageEditor = () => {
   const theme = useTheme()
   const [images, setImages] = useState<CollageImage[]>([])
@@ -527,6 +531,9 @@ const CollageEditor = () => {
   const collageRef = useRef<HTMLDivElement>(null)
   const [canvasWidth, setCanvasWidth] = useState<number>(600)
   const [canvasHeight, setCanvasHeight] = useState<number>(600)
+  const [stickers, setStickers] = useState<Array<{ id: string; sticker: string; size: number; x: number; y: number }>>([])
+  const [showStickersTool, setShowStickersTool] = useState(false)
+
 
   // Initialize history with empty state
   useEffect(() => {
@@ -696,6 +703,17 @@ const CollageEditor = () => {
     setNewTextSize(24)
   }
 
+  const handleAddSticker = (sticker: string, size: number) => {
+    const newSticker = {
+      id: Date.now().toString(),
+      sticker,
+      size,
+      x: canvasWidth / 2 - size / 2,
+      y: canvasHeight / 2 - size / 2,
+    }
+    setStickers([...stickers, newSticker])
+  }
+  
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
     setActiveTab(newValue)
   }
@@ -904,8 +922,28 @@ const CollageEditor = () => {
           </Button>
         </DialogActions>
       </Dialog>
+      <Button
+  startIcon={<EmojiEmotions />}
+  variant="outlined"
+  onClick={() => setShowStickersTool(true)}
+>
+  הוסף מדבקה
+</Button>
+{showStickersTool && (
+  <Paper elevation={3} sx={{ p: 2, mt: 2 }}>
+    <Typography variant="subtitle1">בחר מדבקה:</Typography>
+    <StickersTool onAddSticker={handleAddSticker} />
+  </Paper>
+)}{showStickersTool && (
+  <Paper elevation={3} sx={{ p: 2, mt: 2 }}>
+    <Typography variant="subtitle1">בחר מדבקה:</Typography>
+    <StickersTool onAddSticker={handleAddSticker} />
+  </Paper>
+)}
+  
     </Box>
   )
 }
 
 export default CollageEditor
+

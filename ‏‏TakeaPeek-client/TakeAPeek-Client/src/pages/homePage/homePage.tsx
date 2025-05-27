@@ -848,6 +848,7 @@ const AnimatedImage = styled("img")(({ theme }) => ({
 }))
 
 const HomePage = () => {
+  console.log("homepage")
   const [loaded, setLoaded] = useState(false)
   const isMobile = useMediaQuery("(max-width:600px)")
   const isTablet = useMediaQuery("(max-width:960px)")
@@ -863,19 +864,21 @@ const HomePage = () => {
       title: "ארגון תמונות",
       description: "העלאה, הורדה ומיון תמונות בקלות. ארגון בתיקיות וניהול ספריית התמונות שלך.",
       icon: <FolderOpen size={40} color="#0c678d" />,
-      image: "/placeholder.svg?height=200&width=300",
+      // image: "/placeholder.svg?height=200&width=300",
+       image: "img/logo.png?height=100&width=200",
     },
     {
       title: "זיהוי AI",
       description: "מיון וסינון תמונות באמצעות בינה מלאכותית. זיהוי פנים, אובייקטים וסצנות.",
       icon: <Sparkles size={40} color="#0d818f" />,
-      image: "/placeholder.svg?height=200&width=300",
+      // image: "/placeholder.svg?height=200&width=300",
+      image: "img/logo.png?height=200&width=300",
     },
     {
       title: "יצירת קולאז'ים",
       description: "עיצוב קולאז'ים מרהיבים מהתמונות שלך בכמה קליקים פשוטים.",
       icon: <Grid3x3 size={40} color="#0aa997" />,
-      image: "/placeholder.svg?height=200&width=300",
+      image: "/img/logo.png??height=200&width=300",
     },
   ]
 
@@ -905,10 +908,10 @@ const HomePage = () => {
                 <Box>
                   <Box sx={{ mb: 2, display: "flex", justifyContent: "flex-start" }}>
                     <img
-                      src="/images/logo.png"
+                      src="/img/TakeAPeekLogo.png"
                       alt="TakeAPeek Logo"
                       style={{
-                        height: isMobile ? "60px" : "80px",
+                        height: isMobile ? "90px" : "110px",
                         marginBottom: "16px",
                       }}
                     />
@@ -939,6 +942,36 @@ const HomePage = () => {
                     >
                       צפה בגלריה
                     </Button>
+                    <Button
+                      variant="outlined"
+                      size="large"
+                      sx={{
+                        borderColor: "#0d818f",
+                        color: "#0d818f",
+                        "&:hover": {
+                          borderColor: "#0aa997",
+                          backgroundColor: "rgba(10, 169, 151, 0.04)",
+                        },
+                      }}
+                      component={Link}
+                      to="/design"
+                    >
+צור קולאז                    </Button>
+                    <Button
+                      variant="outlined"
+                      size="large"
+                      sx={{
+                        borderColor: "#0d818f",
+                        color: "#0d818f",
+                        "&:hover": {
+                          borderColor: "#0aa997",
+                          backgroundColor: "rgba(10, 169, 151, 0.04)",
+                        },
+                      }}
+                      component={Link}
+                      to="/calendar"
+                    >
+ליומן שלי                    </Button>
                   </Box>
                 </Box>
               </Fade>
