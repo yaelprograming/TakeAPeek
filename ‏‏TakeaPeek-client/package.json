@@ -14,6 +14,7 @@
     "@radix-ui/react-accordion": "^1.2.8",
     "@radix-ui/react-slot": "^1.2.0",
     "@reduxjs/toolkit": "^2.6.1",
+    "@types/react-router-dom": "^5.3.3",
     "ai": "^4.3.9",
     "aws-sdk": "^2.1692.0",
     "axios": "^1.8.3",
@@ -28,7 +29,7 @@
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-redux": "^9.2.0",
-    "react-router-dom": "^7.6.0",
+    "react-router-dom": "^7.6.1",
     "tailwind-merge": "^3.2.0",
     "tailwindcss-animate": "^1.0.7"
   },

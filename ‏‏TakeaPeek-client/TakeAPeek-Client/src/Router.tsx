@@ -10,6 +10,8 @@ import SmartFiltering from "./components/ai/SmartFiltering";
 import CollageEditor from "./pages/collageEditor/collage-editor";
 import { Gallery } from "./pages/gallery/Gallery";
 import PhotographerCalendar from "./pages/PhotographerCalendar";
+import AuthPage from "./components/AuthPage";
+import { Dashboard } from "@mui/icons-material";
 
 
 
@@ -20,8 +22,7 @@ const Router = createBrowserRouter([
    
         children:
             [
-            
-
+            {path: '', element: <AuthPage />},
        ]
     },
     {

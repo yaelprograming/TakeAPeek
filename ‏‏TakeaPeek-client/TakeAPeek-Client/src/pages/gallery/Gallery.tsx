@@ -10,6 +10,8 @@ import { ImageGrid } from "./ImageGrid"
 import { Breadcrumb } from "./Breadcrumb"
 import { SearchBar } from "./SearchBar"
 import { UploadDialog } from "./UploadDialog"
+import { useCurrentUser } from "../../hooks/useAuth"
+import { useSnackbar } from "notistack"
 
 export interface ImageFile {
   id: string
@@ -22,6 +24,7 @@ export interface ImageFile {
   isOutdoor?: boolean
   analysisCompletedIs: boolean
   isDeleted: boolean
+  ownerId: number
 }
 
 export interface Folder {
@@ -29,6 +32,7 @@ export interface Folder {
   name: string
   parentFolderId?: string
   isDeleted: boolean
+  ownerId: number
 }
 
 export interface FilterOptions {
@@ -42,8 +46,12 @@ export interface FilterOptions {
 const API_BASE_URL = "http://localhost:5293" // Update to your API URL
 
 export function Gallery() {
+  debugger
+  console.log("Rendering Gallery component")
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+  const { userId, getAuthHeaders } = useCurrentUser()
+  const { enqueueSnackbar } = useSnackbar()//?
 
   const [sidebarOpen, setSidebarOpen] = useState(!isMobile)
   const [currentFolder, setCurrentFolder] = useState<string | null>(null)
@@ -65,29 +73,54 @@ export function Gallery() {
   const [uploadDialogOpen, setUploadDialogOpen] = useState(false)
 
   const handleUploadComplete = () => {
+    console.log("Upload completed, refetching data")
     // In a real app, you would refetch the data here
     fetchData(currentFolder)
+    enqueueSnackbar("התמונות הועלו בהצלחה!", { variant: "success" })
   }
 
-  useEffect(() => {
-    fetchData(currentFolder)
-  }, [currentFolder])
+  // useEffect(() => {
+  //   fetchData(currentFolder)
+  // }, [currentFolder])
 
+  useEffect(() => {
+    if (userId) {
+      fetchData(currentFolder)
+    }
+  }, [currentFolder, userId])
   useEffect(() => {
     applyFilters()
   }, [files, filterOptions, searchTerm])
 
   const fetchData = async (folderId: string | null) => {
+    console.log("Fetching data for folder:", folderId)
+    if (!userId) {
+      enqueueSnackbar("עליך להתחבר כדי לצפות בגלריה", { variant: "warning" })
+      setLoading(false)
+      return
+    }
+
     setLoading(true)
+    console.log("Fetching data for folder:", folderId)
     try {
       // Use axios to fetch data from your API
       const url = folderId ? `${API_BASE_URL}/folders/${folderId}/contents` : `${API_BASE_URL}/folders/0/contents`
-
+console.log(url, "URL for fetching data")
       const { data } = await axios.get(url)
+      // const { data } = await axios.get(url, {
+      //   headers: getAuthHeaders(),
+      // })
 
-      setFolders(data.folders?.filter((folder: Folder) => !folder.isDeleted) || [])
-      setFiles(data.files?.filter((file: ImageFile) => !file.isDeleted) || [])
+      // setFolders(data.folders?.filter((folder: Folder) => !folder.isDeleted) || [])
+      // setFiles(data.files?.filter((file: ImageFile) => !file.isDeleted) || [])
+      const userFolders =
+        data.folders?.filter((folder: Folder) => !folder.isDeleted && folder.ownerId === userId) || []
 
+      const userFiles =
+        data.files?.filter((file: ImageFile) => !file.isDeleted && file.ownerId === userId) || []
+
+      setFolders(userFolders)
+      setFiles(userFiles)
       // Fetch breadcrumb
       const breadcrumbUrl = folderId
         ? `${API_BASE_URL}/folders/${folderId}/breadcrumb`

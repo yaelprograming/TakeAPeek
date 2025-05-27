@@ -20,10 +20,9 @@ namespace TakeAPeek_server.Controllers
         public static void MapFileEndpoints(WebApplication app)
         {
             app.MapGet("/files", async (IFileService fileService) => await fileService.GetAllFiles());
-            // .RequireAuthorization(); ;
 
-            app.MapGet("/files/{id}", async (int id, IFileService fileService) => await fileService.GetFile(id));
-            //.RequireAuthorization(); ;
+            app.MapGet("/files/{id}", async (int id, IFileService fileService) => await fileService.GetFile(id))
+            ;
 
             // app.MapPost("/files", async (TakeAPeek_server.Entities.File file, IFileService fileService) => await fileService.CreateFile(file));
             // .RequireAuthorization("Editor", "Admin"); ;
@@ -39,11 +38,11 @@ namespace TakeAPeek_server.Controllers
 
                 var updatedFile = await fileService.UpdateFile(existingFile);
                 return Results.Ok(updatedFile);
-            });
-            //.RequireAuthorization( "Editor", "Admin" ); ;
+            })
+            .RequireAuthorization( "Editor", "Admin" ); 
 
 
-            app.MapDelete("/files/{id}", async (int id, IFileService fileService) => await fileService.DeleteFile(id));//.RequireAuthorization( "Editor", "Admin"); ;
+            app.MapDelete("/files/{id}", async (int id, IFileService fileService) => await fileService.DeleteFile(id)).RequireAuthorization( "Editor", "Admin"); 
 
             app.MapGet("/files/{id}/download", async (int id, IFileService fileService) =>
             {
@@ -62,8 +61,8 @@ namespace TakeAPeek_server.Controllers
                 {
                     return Results.NotFound(ex.Message);
                 }
-            });
-
+            }).RequireAuthorization(); ;
+            
             //app.MapGet("/files/{id}/download", async (int id, IFileService fileService) =>
             //{
             //    try
@@ -338,7 +337,7 @@ namespace TakeAPeek_server.Controllers
                     message = "העלאה בוצעה בהצלחה. הניתוח יתבצע ברקע.",
                     uploaded = uploadedFiles.Select(f => new { f.Id, f.FileName }),
                 });
-            }).DisableAntiforgery();
+            }).DisableAntiforgery().RequireAuthorization("Editor", "Admin");
 
             app.MapPost("/api/files/filter", async (
                 [FromBody] FilterRequest request,
