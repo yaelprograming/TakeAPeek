@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { AuthService } from '../../servies/auth/auth.service';
 
 interface MenuItem {
@@ -12,7 +12,7 @@ interface MenuItem {
 
 @Component({
   selector: 'app-sidebar',
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule],
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.css',
   standalone: true,

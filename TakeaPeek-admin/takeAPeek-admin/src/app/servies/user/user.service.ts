@@ -30,7 +30,6 @@ export class UserService {
 
   constructor(private http: HttpClient) { }
 
-  // פונקציה מותאמת לקריאה מ-UserManagementComponent
   getUsers(
     page: number = 1,
     pageSize: number = 10,
@@ -38,14 +37,12 @@ export class UserService {
     sortDirection: string = 'asc',
     filters: any = {}
   ): Observable<{ users: User[], total: number }> {
-    // בניית פרמטרים לשאילתה
     let params = new HttpParams()
       .set('page', page.toString())
       .set('pageSize', pageSize.toString())
       .set('sortField', sortField)
       .set('sortDirection', sortDirection);
     
-    // הוספת פרמטרים לסינון
     if (filters.role) {
       params = params.set('role', filters.role);
     }
@@ -54,80 +51,24 @@ export class UserService {
       params = params.set('isActive', filters.isActive);
     }
     
-    // אם השרת לא תומך בדפדוף/מיון/סינון, אפשר להשתמש בפונקציה הבסיסית ולטפל בלוגיקה בצד הלקוח
     return this.http.get<{ users: User[], total: number }>(this.apiUrl, { params });
     
-    // אלטרנטיבה אם השרת לא מחזיר את המבנה הנדרש:
-    // return this.getAllUsers().pipe(
-    //   map(users => {
-    //     // כאן תוכל לבצע סינון, מיון ודפדוף בצד הלקוח
-    //     return { users: users.slice((page-1)*pageSize, page*pageSize), total: users.length };
-    //   })
-    // );
+
   }
 
-  // הפונקציות המקוריות
-  // getAllUsers(): Observable<User[]> {
-  //   return this.http.get<User[]>(`${this.apiUrl}`);
-  // }
-
-  // getUser(id: number): Observable<User> {
-  //   return this.http.get<User>(`${this.apiUrl}/${id}`);
-  // }
-
-  // createUser(userData: User): Observable<User> {
-  //   return this.http.post<User>(`${environment.apiUrl}/auth/register`, userData);
-  // }
-
-  // updateUser(userData: User): Observable<User> {
-  //   return this.http.put<User>(`${this.apiUrl}/${userData.id}`, userData);
-  // }
-
-  // deleteUser(id: number): Observable<any> {
-  //   return this.http.delete<any>(`${this.apiUrl}/${id}`);
-  // }
-
-  // פונקציות נוספות שנדרשות על ידי UserManagementComponent
-  // exportUsers(): Observable<Blob> {
-  //   return this.http.get(`${this.apiUrl}/export`, {
-  //     responseType: 'blob'
-  //   });
-  // }
+  
   
   importUsers(formData: FormData): Observable<any> {
     return this.http.post(`${this.apiUrl}/import`, formData);
   }
-////חדש!!!!!
-// getAllUsers(filters?: UserFilters): Observable<PaginatedUsers> {
-//   console.log("getAllUsers")
-//   let params = new HttpParams()
 
-//   if (filters) {
-//     if (filters.search) params = params.set("search", filters.search)
-//     if (filters.role) params = params.set("role", filters.role)
-//     if (filters.isActive !== undefined) params = params.set("isActive", filters.isActive.toString())
-//     if (filters.department) params = params.set("department", filters.department)
-//     if (filters.sortBy) params = params.set("sortBy", filters.sortBy)
-//     if (filters.sortDirection) params = params.set("sortDirection", filters.sortDirection)
-//     if (filters.page) params = params.set("page", filters.page.toString())
-//     if (filters.limit) params = params.set("limit", filters.limit.toString())
-//   }
-
-//   console.log("getAllUsers-after")
-
-//  var data= this.http.get<PaginatedUsers>(this.apiUrl, { params })
-//  console.log("data",data)
-//  return data
-// }
 
 getAllUsers(filters?: UserFilters): Observable<PaginatedUsers> {
-  // במקום לקרוא ל-applyClientSideFilters, נעשה את הסינון כאן
   return this.http.get<User[]>(this.apiUrl).pipe(
     map((users) => {
       let filteredUsers = [...users]
 
       if (filters) {
-        // חיפוש טקסט - זה החלק שלא עבד!
         if (filters.search && filters.search.trim()) {
           const searchTerm = filters.search.toLowerCase().trim()
           filteredUsers = filteredUsers.filter(
@@ -233,10 +174,7 @@ exportUsers(format: "excel" | "csv"): Observable<Blob> {
   return this.http.get<User[]>(this.apiUrl).pipe(map((users) => this.createExportFile(users, format)))
 }
 
-// uploadAvatar(userId: number, file: File): Observable<User> {
-//   // אם אין endpoint, פשוט נחזיר את המשתמש כמו שהוא
-//   return this.getUser(userId)
-// }
+
 
 private applyClientSideFilters(users: User[], filters?: UserFilters): PaginatedUsers {
   let filteredUsers = [...users]

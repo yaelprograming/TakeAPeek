@@ -114,7 +114,6 @@ export class UserComponent implements OnInit{
   loadUsers(): void {
     this.isLoading = true
 
-    // כאן הבעיה הייתה! צריך לקרוא לערכים נכון
     const searchValue = this.searchControl.value?.trim() || ""
     const roleValue = this.roleFilter.value || []
     const departmentValue = this.departmentFilter.value || ""
@@ -131,7 +130,7 @@ export class UserComponent implements OnInit{
       sortDirection: this.sort?.direction || "desc",
     }
 
-    console.log("Filters being sent:", filters) // לדיבוג
+    console.log("Filters being sent:", filters) 
 
     this.userService.getAllUsers(filters).subscribe({
       next: (response) => {
