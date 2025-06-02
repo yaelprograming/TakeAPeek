@@ -54,9 +54,18 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("EditorOrAdmin", policy => policy.RequireRole("Editor", "Admin"));
     options.AddPolicy("ViewerOnly", policy => policy.RequireRole("Viewer"));
 });
-//sql
+
+
 builder.Services.AddDbContext<DataContext>(options =>
-    options.UseSqlServer("Data Source=DESKTOP-1VUANBN; Initial Catalog=TakeAPeek; Integrated Security=True;TrustServerCertificate=True;"));
+{
+    var x = builder.Configuration["CONNECTION_STRING"];
+    Console.WriteLine($"Connection: {x}");
+    options.UseMySql(
+        x,
+        ServerVersion.AutoDetect(x),
+        mySqlOptions => mySqlOptions.EnableRetryOnFailure()
+    );
+});
 
 
 // =========== add services =========== 
@@ -154,5 +163,6 @@ AuthEndpoints.MapAuthEndpoints(app);
 UserEndpoints.MapUserEndpoints(app);
 AIEndpoints.MapAIEndpoints(app);
 EventEndpoints.MapEventEndpoints(app);
+
 app.Run();
 

@@ -11,43 +11,80 @@ namespace TakeAPeek_server.Controllers
         public static void MapAuthEndpoints(WebApplication app)
         {
 
-            app.MapPost("/auth/login", async (LoginModel model, AuthService authService, IUserService userService) =>
+            app.MapPost("/auth/login", async (LoginModel model, AuthService authService, IUserService userService,IUserRoleService userRoleService) =>
             {
                 Console.WriteLine($"username: {model.Email}, Password: {model.Password}");
 
-                var roleName = await userService.AuthenticateAsync(model.Email, model.Password);
-                Console.WriteLine("Roles: " + string.Join(", ", roleName));
+                //var roleName = await userService.AuthenticateAsync(model.Email, model.Password);
+                //Console.WriteLine("Roles: " + string.Join(", ", roleName));
 
-                if (string.IsNullOrEmpty(roleName))
+                //if (string.IsNullOrEmpty(roleName))
+                //{
+                //    Console.WriteLine("not found role");
+                //    return Results.Unauthorized();
+                //}
+
+                //var roles = roleName.Split(",");
+
+                //if (roles.Contains("Admin"))
+                //{
+                //    var token = authService.GenerateJwtToken(model.Email, roles);
+                //    return Results.Ok(new { Token = token });
+                //}
+                //else if (roles.Contains("Editor"))
+                //{
+                //    var token = authService.GenerateJwtToken(model.Email, roles);
+                //    return Results.Ok(new { Token = token });
+                //}
+                //else if (roles.Contains("Viewer"))
+                //{
+                //    var token = authService.GenerateJwtToken(model.Email, roles);
+                //    return Results.Ok(new { Token = token });
+                //}
+                //return Results.Unauthorized();
+
+                var user = await userService.AuthenticateAsync(model.Email, model.Password);
+                if (user == null)
                 {
-                    Console.WriteLine("not found role");
+                    Console.WriteLine("User not found or wrong password");
                     return Results.Unauthorized();
                 }
 
-                var roles = roleName.Split(",");
+                var roles = await userRoleService.GetUserRoles(user.Id); 
 
-                if (roles.Contains("Admin"))
-                {
-                    var token = authService.GenerateJwtToken(model.Email, roles);
-                    return Results.Ok(new { Token = token });
-                }
-                else if (roles.Contains("Editor"))
-                {
-                    var token = authService.GenerateJwtToken(model.Email, roles);
-                    return Results.Ok(new { Token = token });
-                }
-                else if (roles.Contains("Viewer"))
-                {
-                    var token = authService.GenerateJwtToken(model.Email, roles);
-                    return Results.Ok(new { Token = token });
-                }
-                return Results.Unauthorized();
+                Console.WriteLine("Roles: " + string.Join(", ", roles));
+
+                var token = authService.GenerateJwtToken(user.Id.ToString(), user.Email, roles);
+
+                return Results.Ok(new { Token = token });
+
             });
 
 
-            app.MapPost("/auth/register", async (RegisterModel model, AuthService authService, IUserService userService) =>
+            //app.MapPost("/auth/register", async (RegisterModel model, AuthService authService, IUserService userService) =>
+            //{
+            //    Console.WriteLine("name: "+model.Name);
+            //    if (model == null)
+            //    {
+            //        return Results.Conflict("User is not valid");
+            //    }
+
+            //    var existingUser = await userService.CreateUser(model);
+
+            //    if (existingUser == null)
+            //        return Results.BadRequest("Failed to create user or assign role");
+
+            //    var token = authService.GenerateJwtToken(model.Name, new[] { model.RoleName });
+            //    return Results.Ok(new { Token = token,User= existingUser });
+            //});
+
+            app.MapPost("/auth/register", async (
+    RegisterModel model,
+    AuthService authService,
+    IUserService userService) =>
             {
-                Console.WriteLine("name: "+model.Name);
+                Console.WriteLine("name: " + model.Name);
+
                 if (model == null)
                 {
                     return Results.Conflict("User is not valid");
@@ -58,9 +95,15 @@ namespace TakeAPeek_server.Controllers
                 if (existingUser == null)
                     return Results.BadRequest("Failed to create user or assign role");
 
-                var token = authService.GenerateJwtToken(model.Name, new[] { model.RoleName });
-                return Results.Ok(new { Token = token,User= existingUser });
+                var token = authService.GenerateJwtToken(
+                    existingUser.Id.ToString(),
+                    existingUser.Email,
+                    new[] { model.RoleName }
+                );
+
+                return Results.Ok(new { Token = token, User = existingUser });
             });
+
         }
     }
     

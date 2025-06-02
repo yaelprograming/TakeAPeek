@@ -74,7 +74,7 @@ namespace TakeAPeek_server.Services.CServices
             return true;
         }
 
-        public async Task<string> AuthenticateAsync(string email, string password)
+        public async Task<User> AuthenticateAsync(string email, string password)
         {
             Console.WriteLine("find user");
             User user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
@@ -84,17 +84,18 @@ namespace TakeAPeek_server.Services.CServices
                 return null;
             }
             //return user.Role;
-            Console.WriteLine("user!!!: "+user.Id);
-            var roles = await _context.UserRoles
-                .Where(ur => ur.UserId == user.Id)
-                .Include(ur => ur.Role)  // טוען את התפקידים
-                .Select(ur => ur.Role.RoleName)
-                .ToArrayAsync();
+            //Console.WriteLine("user!!!: "+user.Id);
+            //var roles = await _context.UserRoles
+            //    .Where(ur => ur.UserId == user.Id)
+            //    .Include(ur => ur.Role)  // טוען את התפקידים
+            //    .Select(ur => ur.Role.RoleName)
+            //    .ToArrayAsync();
 
-            Console.WriteLine($"user roles: {string.Join(", ", roles)}");
+            //Console.WriteLine($"user roles: {string.Join(", ", roles)}");
 
-            // כאן נוכל להחזיר את התפקידים כ-Claims בטוקן JWT
-            return string.Join(",", roles);
+            //// כאן נוכל להחזיר את התפקידים כ-Claims בטוקן JWT
+            //return string.Join(",", roles);
+            return user;
         }
     }
 }

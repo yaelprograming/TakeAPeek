@@ -14,14 +14,16 @@ public class AuthService
             _configuration = configuration;
         }
 
-        public string GenerateJwtToken(string email, string[] roles)
+        public string GenerateJwtToken(string userId, string email, string[] roles)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
             var claims = new List<Claim>
         {
-            new Claim(ClaimTypes.Email, email)
+            new Claim(ClaimTypes.Email, email),
+                    new Claim(ClaimTypes.NameIdentifier, userId),
+        new Claim(JwtRegisteredClaimNames.Sub, userId)
         };
 
             // הוספת תפקידים כ-Claims

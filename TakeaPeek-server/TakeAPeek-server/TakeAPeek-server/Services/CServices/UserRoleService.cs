@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using TakeAPeek_server.DataAccess;
 using TakeAPeek_server.Entities;
 using TakeAPeek_server.Services.IServices;
@@ -34,6 +35,14 @@ namespace TakeAPeek_server.Services.CServices
             }
 
             return userRole;  // מחזיר את קשר המשתמש-תפקיד שנוסף
+        }
+        public async Task<string[]> GetUserRoles(int userId)
+        {
+            return await _context.UserRoles
+                .Where(ur => ur.UserId == userId)
+                .Include(ur => ur.Role)
+                .Select(ur => ur.Role.RoleName)
+                .ToArrayAsync();
         }
     }
 }

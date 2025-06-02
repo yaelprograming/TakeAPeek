@@ -7,6 +7,7 @@ namespace TakeAPeek_server.Services.IServices
     {
         Task<UserRole> AddUserRole(int userId, int roleId);
 
-       
+        Task<string[]> GetUserRoles(int userId);
+
     }
 }

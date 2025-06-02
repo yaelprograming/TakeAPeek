@@ -12,6 +12,6 @@ namespace TakeAPeek_server.Services.IServices
         Task<User> UpdateUser(User user);
         Task<bool> DeleteUser(int Id);
         //Task<string> AuthenticateAsync(string username, string password);
-        Task<string> AuthenticateAsync(string email, string password);
+  Task<User> AuthenticateAsync(string email, string password);
     }
 }
