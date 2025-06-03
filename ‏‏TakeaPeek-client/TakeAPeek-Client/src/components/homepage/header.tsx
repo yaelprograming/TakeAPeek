@@ -63,8 +63,7 @@
 // export default Header;
 {/* <Link to='/home'><img style={{ width: 50, top: 20, right: 40, position: 'absolute' , zIndex: 2}} src="img/logo.png" alt="logo" /></Link> */}
 
-import React from "react";
-import { AppBar, Toolbar, Typography, Box, IconButton } from "@mui/material";
+import { AppBar, Toolbar, Typography, Box } from "@mui/material";
 import { Link } from "react-router-dom";
 import AccountMenu from "../auth/accountMenu";
 

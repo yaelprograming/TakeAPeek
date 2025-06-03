@@ -129,14 +129,7 @@ interface TemplateSelectorProps {
 
 export const TemplateSelector = ({ onSelect }: TemplateSelectorProps) => {
   // const { language } = useLanguage();
-  const translations = {
-    en: {
-      title: "Collage Templates",
-    },
-    he: {
-      title: "תבניות קולאז'",
-    },
-  }
+
 
   // const t = translations[language];
   const t = "תבניות קולאז"

@@ -117,14 +117,7 @@ interface AspectRatioSelectorProps {
 
 export const AspectRatioSelector = ({ selectedRatio, onChange }: AspectRatioSelectorProps) => {
   // const { language } = useLanguage();
-  const translations = {
-    en: {
-      title: "Aspect Ratio",
-    },
-    he: {
-      title: "יחס גובה-רוחב",
-    },
-  }
+
 
   //  const t = translations[language];
   const t = "יחס גובה-רוחב"

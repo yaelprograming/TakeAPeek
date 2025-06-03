@@ -12,10 +12,10 @@ const CtaSection = () => {
             Join thousands of photographers who have simplified their workflow with Take A Peek.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="bg-white text-turquoise-700 hover:bg-gray-100 text-lg">
+            <Button size="large" className="bg-white text-turquoise-700 hover:bg-gray-100 text-lg">
               Start your free trial
             </Button>
-            <Button size="lg" variant="outline" className="border-white text-white hover:bg-turquoise-700 text-lg">
+            <Button size="large" variant="outlined" className="border-white text-white hover:bg-turquoise-700 text-lg">
               Schedule a demo
             </Button>
           </div>

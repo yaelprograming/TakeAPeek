@@ -13,7 +13,7 @@
   
 //   export default HomePage;
 
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Container, Box, Typography, Button, Grid, Card, CardContent } from "@mui/material";
 import { motion } from "framer-motion";
 
@@ -214,10 +214,10 @@ const Testimonials = () => {
           <Grid item xs={12} sm={6} md={4} key={index}>
             <motion.div
               whileHover={{ scale: 1.05 }}
-              sx={{
-                p: 3,
+              style={{
+                padding: "24px",
                 background: "#f5f5f5",
-                boxShadow: 3,
+                boxShadow: "3px 3px 10px rgba(0, 0, 0, 0.1)",
                 borderRadius: "30px",
                 transformOrigin: "center",
                 transition: "transform 0.3s",

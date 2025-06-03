@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
+// import { Button } from '@/components/ui/button';
 import { Menu, X } from 'lucide-react';
+import { Button } from '@mui/material';
 
 const NavBar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -43,7 +44,7 @@ const NavBar = () => {
             <a href="#features" className="text-darkblue-800 hover:text-turquoise-600 transition-colors">Features</a>
             <a href="#gallery" className="text-darkblue-800 hover:text-turquoise-600 transition-colors">Gallery</a>
             <a href="#pricing" className="text-darkblue-800 hover:text-turquoise-600 transition-colors">Pricing</a>
-            <Button variant="outline" className="border-turquoise-500 text-turquoise-700 hover:bg-turquoise-50">
+            <Button variant="outlined" className="border-turquoise-500 text-turquoise-700 hover:bg-turquoise-50">
               Log in
             </Button>
             <Button className="bg-turquoise-600 hover:bg-turquoise-700 text-white">
@@ -74,7 +75,7 @@ const NavBar = () => {
               Pricing
             </a>
             <div className="pt-4 space-y-2">
-              <Button variant="outline" className="w-full border-turquoise-500 text-turquoise-700">
+              <Button variant="outlined" className="w-full border-turquoise-500 text-turquoise-700">
                 Log in
               </Button>
               <Button className="w-full bg-turquoise-600 hover:bg-turquoise-700 text-white">

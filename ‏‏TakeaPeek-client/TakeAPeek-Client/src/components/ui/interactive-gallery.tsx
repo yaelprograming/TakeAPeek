@@ -22,21 +22,21 @@ interface InteractiveGalleryProps {
   enableZoom?: boolean
 }
 
-const GalleryContainer = styled(Box)(({ theme }) => ({
+const GalleryContainer = styled(Box)(() => ({
   position: "relative",
   overflow: "hidden",
   borderRadius: "16px",
   boxShadow: "0 10px 30px rgba(0, 0, 0, 0.15)",
 }))
 
-const GalleryImage = styled("img")(({ theme }) => ({
+const GalleryImage = styled("img")(() => ({
   width: "100%",
   height: "100%",
   objectFit: "cover",
   transition: "transform 0.5s ease",
 }))
 
-const GalleryControls = styled(Box)(({ theme }) => ({
+const GalleryControls = styled(Box)(() => ({
   position: "absolute",
   bottom: "20px",
   left: "50%",
@@ -47,7 +47,7 @@ const GalleryControls = styled(Box)(({ theme }) => ({
   zIndex: 10,
 }))
 
-const GalleryDot = styled(Box)<{ active: boolean }>(({ theme, active }) => ({
+const GalleryDot = styled(Box)<{ active: boolean }>(({ active }) => ({
   width: active ? "12px" : "8px",
   height: active ? "12px" : "8px",
   borderRadius: "50%",
@@ -56,7 +56,7 @@ const GalleryDot = styled(Box)<{ active: boolean }>(({ theme, active }) => ({
   transition: "all 0.3s ease",
 }))
 
-const GalleryCaption = styled(Box)(({ theme }) => ({
+const GalleryCaption = styled(Box)(() => ({
   position: "absolute",
   bottom: 0,
   left: 0,
@@ -67,7 +67,7 @@ const GalleryCaption = styled(Box)(({ theme }) => ({
   textAlign: "right",
 }))
 
-const ZoomOverlay = styled(Box)(({ theme }) => ({
+const ZoomOverlay = styled(Box)(() => ({
   position: "fixed",
   top: 0,
   left: 0,

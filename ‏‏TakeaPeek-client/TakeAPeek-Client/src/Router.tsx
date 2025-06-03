@@ -1,4 +1,4 @@
-import { createBrowserRouter, Link } from "react-router-dom"
+import { createBrowserRouter } from "react-router-dom"
 import AppLayout from "./AppLayout";
 import UserDashboard from "./pages/וserDashboard";
 import HomePage from "./components/homepage/homePage";
@@ -10,8 +10,6 @@ import SmartFiltering from "./components/ai/SmartFiltering";
 import CollageEditor from "./pages/collageEditor/collage-editor";
 import { Gallery } from "./pages/gallery/Gallery";
 import PhotographerCalendar from "./pages/PhotographerCalendar";
-import AuthPage from "./components/AuthPage";
-import { Dashboard } from "@mui/icons-material";
 
 
 
@@ -20,10 +18,10 @@ const Router = createBrowserRouter([
         path: '/',
         element: <AppLayout/>,
    
-        children:
-            [
-            {path: '', element: <AuthPage />},
-       ]
+    //     children:
+    //         [
+    //         {path: '', element: <AuthPage />},
+    //    ]
     },
     {
         path: '/gallery',

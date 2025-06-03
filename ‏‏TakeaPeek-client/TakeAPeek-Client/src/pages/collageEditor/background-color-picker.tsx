@@ -85,7 +85,7 @@ export const BackgroundColorPicker = ({ color, onChange }: BackgroundColorPicker
     handleClose()
   }
 
-  const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
+  const handleTabChange = (_event: React.SyntheticEvent, newValue: number) => {
     setTabValue(newValue)
   }
 
@@ -146,7 +146,7 @@ export const BackgroundColorPicker = ({ color, onChange }: BackgroundColorPicker
         }}
       >
         <Box sx={{ p: 2, width: 320 }}>
-          <Tabs value={tabValue} onChange={handleTabChange} variant="fullWidth" sx={{ mb: 2 }}>
+          <Tabs value={tabValue} onChange={(event, newValue) => handleTabChange(event, newValue)} variant="fullWidth" sx={{ mb: 2 }}>
             <Tab label="Colors" />
             <Tab label="Gradients" />
             <Tab label="Patterns" />

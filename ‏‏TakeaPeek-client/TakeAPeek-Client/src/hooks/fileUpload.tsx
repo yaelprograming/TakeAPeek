@@ -157,7 +157,7 @@ import {
 interface FileUploadProps {
     open: boolean;
     onClose: () => void;
-    onUpload: (files: File[]) => Promise<void>;
+    onUpload: (uploadData: { files: File[]; folderId: string; ownerId: number }) => Promise<void>;
     folderId: string;
     ownerId: number; // קבלת ownerId
 }
@@ -175,7 +175,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ open, onClose, onUpload, folder
     const handleUploadClick = async () => {
         console.log("handleUploadClick")
         if (files.length > 0) {
-            await onUpload(files, folderId, ownerId); // העברת ownerId
+            await onUpload({ files, folderId, ownerId }); // העברת ownerId
             onClose();
         }
     };

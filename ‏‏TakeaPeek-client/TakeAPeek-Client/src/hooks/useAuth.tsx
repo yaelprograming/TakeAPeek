@@ -3,7 +3,7 @@ import { useAuth as useAuthContext } from "../components/AuthContext"
 // Hook נוח לקבלת פרטי המשתמש
 export const useCurrentUser = () => {
   const { user, userId, isAuthenticated } = useAuthContext()
-
+console.log("useCurrentUser called", { user, userId, isAuthenticated })
   return {
     user,
     userId,

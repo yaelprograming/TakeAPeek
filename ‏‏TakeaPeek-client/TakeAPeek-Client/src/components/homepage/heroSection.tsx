@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import  { useState, useEffect } from 'react';
 import { Box, Typography, styled } from '@mui/material';
-import Logo from './logo';
 
 // Import your logo component or image
 

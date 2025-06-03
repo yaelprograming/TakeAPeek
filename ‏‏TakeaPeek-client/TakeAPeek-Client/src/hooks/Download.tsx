@@ -1,4 +1,3 @@
-import axios from 'axios';
 
 // const downloadFile = async (fileId:string) => {
 //   try {

@@ -766,15 +766,12 @@ import {
   CardContent,
   CardMedia,
   useMediaQuery,
-  Fade,
-  Slide,
-  Zoom,
   Typography,
   TypographyProps
 } from "@mui/material"
 import { styled } from "@mui/material/styles"
 import { Camera, Upload, FolderOpen, ImageIcon, Search, Grid3x3, Sparkles } from "lucide-react"
-import { Link, Link as RouterLink, useNavigate } from "react-router-dom"
+import { Link , useNavigate } from "react-router-dom"
 import React from "react"
 import { useAuth } from "../../components/AuthContext"
 import Header from "../../components/Header"
@@ -810,7 +807,6 @@ export const GradientTypography = React.forwardRef<HTMLSpanElement, TypographyPr
 // סגנון מותאם אישית לכפתורים
 const GradientButton = React.forwardRef(function GradientButton(
   props: React.ComponentProps<typeof Button> & { sx?: object },
-  ref
 ) {
     return (
       <Button
@@ -830,7 +826,7 @@ const GradientButton = React.forwardRef(function GradientButton(
   });
 
 // סגנון מותאם אישית לכרטיסים
-const FeatureCard = styled(Card)(({ theme }) => ({
+const FeatureCard = styled(Card)(() => ({
   height: "100%",
   display: "flex",
   flexDirection: "column",
@@ -845,7 +841,7 @@ const FeatureCard = styled(Card)(({ theme }) => ({
 }))
 
 // אנימציה לתמונות
-const AnimatedImage = styled("img")(({ theme }) => ({
+const AnimatedImage = styled("img")(() => ({
   width: "100%",
   height: "auto",
   borderRadius: "12px",
@@ -857,7 +853,7 @@ const AnimatedImage = styled("img")(({ theme }) => ({
 }))
 
 const HomePage = () => {
-  const [loaded, setLoaded] = useState(false)
+  const [_, setLoaded] = useState(false)
   const { isAuthenticated, user } = useAuth()
   const isMobile = useMediaQuery("(max-width:600px)")
   const isTablet = useMediaQuery("(max-width:960px)")

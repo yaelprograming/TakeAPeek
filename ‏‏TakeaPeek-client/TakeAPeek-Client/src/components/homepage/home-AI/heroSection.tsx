@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
+// import { Button } from '@/components/ui/button';
 import { Camera, Image, Share, Cloud, Wand2 } from 'lucide-react';
+import { Button } from '@mui/material';
 
 const HeroSection = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -31,10 +32,10 @@ const HeroSection = () => {
             </div>
             
             <div className="flex flex-wrap gap-4">
-              <Button size="lg" className="bg-turquoise-600 hover:bg-turquoise-700 text-white text-lg">
+              <Button size="large" className="bg-turquoise-600 hover:bg-turquoise-700 text-white text-lg">
                 Start free trial
               </Button>
-              <Button size="lg" variant="outline" className="border-turquoise-200 text-darkblue-900 hover:bg-turquoise-50 text-lg">
+              <Button size="large" variant="outlined" className="border-turquoise-200 text-darkblue-900 hover:bg-turquoise-50 text-lg">
                 Watch demo
               </Button>
             </div>

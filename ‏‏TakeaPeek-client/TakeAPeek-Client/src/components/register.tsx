@@ -34,8 +34,8 @@ const Register = () => {
 
   const [newUser, setNewUser] = useState({
     Name: '',
-    email: '',
-    password: '',
+    Email: '',
+    Password: '',
     roleName: 'Editor'
   });
 
@@ -53,7 +53,7 @@ const Register = () => {
     e.preventDefault();
 
     console.log("State before submission:", newUser)
-    if (!newUser.Name || !newUser.email || !newUser.password) {
+    if (!newUser.Name || !newUser.Email || !newUser.Password) {
       setFormError("יש למלא את כל השדות.");
       return;
     }
@@ -84,8 +84,8 @@ const Register = () => {
           <Paper elevation={0} sx={{ width: '100%', bgcolor: 'transparent', p: 2 }}>
             <form onSubmit={handleRegister}>
               <TextField fullWidth name="Name" placeholder="שם מלא*" variant="outlined" margin="normal" value={newUser.Name} onChange={handleChange} sx={{ bgcolor: 'white', borderRadius: 1, mb: 2 }} error={!!formError} />
-              <TextField fullWidth name="email" placeholder="אימייל*" variant="outlined" margin="normal" value={newUser.email} onChange={handleChange} sx={{ bgcolor: 'white', borderRadius: 1, mb: 2 }} error={!!formError} />
-              <TextField fullWidth name="password" type="password" placeholder="סיסמה*" variant="outlined" margin="normal" value={newUser.password} onChange={handleChange} sx={{ bgcolor: 'white', borderRadius: 1, mb: 2 }}  />
+              <TextField fullWidth name="email" placeholder="אימייל*" variant="outlined" margin="normal" value={newUser.Email} onChange={handleChange} sx={{ bgcolor: 'white', borderRadius: 1, mb: 2 }} error={!!formError} />
+              <TextField fullWidth name="password" type="password" placeholder="סיסמה*" variant="outlined" margin="normal" value={newUser.Password} onChange={handleChange} sx={{ bgcolor: 'white', borderRadius: 1, mb: 2 }}  />
               {(formError || error) && (
                 <FormHelperText error sx={{ mb: 2 }}>
                   {formError || error}

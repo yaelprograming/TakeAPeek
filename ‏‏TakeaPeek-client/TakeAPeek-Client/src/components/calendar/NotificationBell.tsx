@@ -16,7 +16,7 @@ import {
   Button,
 } from "@mui/material"
 import { NotificationsOutlined as BellIcon } from "@mui/icons-material"
-import { format, isToday, isTomorrow, addDays, isAfter, isBefore, startOfDay } from "date-fns"
+import { format, isToday, isTomorrow, addDays, isAfter, isBefore } from "date-fns"
 import { he } from "date-fns/locale"
 import { Task } from "../../types/types"
 import { taskService } from "./taskService"
@@ -98,7 +98,7 @@ const NotificationBell = () => {
   const getRelativeTimeColor = (dateString: string) => {
     const date = new Date(dateString)
     const now = new Date()
-    const tomorrow = addDays(startOfDay(now), 1)
+    // const tomorrow = addDays(startOfDay(now), 1)
     const nextWeek = addDays(now, 7)
 
     if (isToday(date)) {

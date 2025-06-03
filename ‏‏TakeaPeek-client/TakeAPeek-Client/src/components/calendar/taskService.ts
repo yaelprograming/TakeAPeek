@@ -6,10 +6,10 @@ const API_URL = "http://localhost:5293/events"
 // };
 
 // // פונקציה לקבלת מזהה המשתמש
-const getUserId = () => {
-  // return localStorage.getItem('userId');
-  return "1"; // החזר מזהה דוגמה
-};
+// const getUserId = () => {
+//   // return localStorage.getItem('userId');
+//   return "1"; // החזר מזהה דוגמה
+// };
 export const taskService = {
   async getTasks(): Promise<Task[]> {
     const response = await fetch(API_URL)

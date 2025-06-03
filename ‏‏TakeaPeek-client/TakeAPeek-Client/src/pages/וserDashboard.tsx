@@ -282,12 +282,11 @@
 // }
 
 
-import React, { useState } from 'react';
+import  { useState } from 'react';
 import {
   Box,
   Drawer,
   List,
-  ListItem,
   ListItemButton,
   ListItemIcon,
   ListItemText,
@@ -299,7 +298,6 @@ import {
   SxProps,
   Theme,
 } from '@mui/material';
-import PhotoLibraryIcon from '@mui/icons-material/PhotoLibrary';
 import FolderIcon from '@mui/icons-material/Folder';
 import ShareIcon from '@mui/icons-material/Share';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
@@ -310,31 +308,28 @@ import Logo from '../components/homepage/logo'; // Corrected logo import path
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
 
 // Styled Components for enhanced styling
-const StyledDrawer = styled(Drawer)(({ theme }) => ({
-  // Define width based on collapsed state: 60px (icon width) when collapsed, 240px otherwise
-  width: (props: { collapsed: boolean }) => props.collapsed ? 60 : 240,
-  flexShrink: 0, // Prevent the drawer from shrinking
-  // Transition for smooth width changes
+const StyledDrawer = styled(Drawer)<{ collapsed: boolean }>(({ theme, collapsed }) => ({
+  width: collapsed ? 60 : 240,
+  flexShrink: 0,
   transition: theme.transitions.create('width', {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.enteringScreen,
   }),
   '& .MuiDrawer-paper': {
-    // Apply same width logic to the drawer paper
-    width: (props: { collapsed: boolean }) => props.collapsed ? 60 : 240,
+    width: collapsed ? 60 : 240,
     boxSizing: 'border-box',
-    backgroundColor: theme.palette.grey[100], // Light grey background
-    borderRight: `1px solid ${theme.palette.divider}`, // Right border for separation
-    overflowX: 'hidden', // Hide horizontal overflow
-    // Transition for smooth width changes
+    backgroundColor: theme.palette.grey[100],
+    borderRight: `1px solid ${theme.palette.divider}`,
+    overflowX: 'hidden',
     transition: theme.transitions.create('width', {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
     }),
   },
-}));
+}))
 
-const StyledListItemButton = styled(ListItemButton)(({ theme }) => ({
+
+const StyledListItemButton = styled(ListItemButton)(() => ({
  // borderRadius: '8px', // Rounded corners
   //margin: theme.spacing(0.5), // Spacing between buttons
   transition: 'color 0.3s ease', // Transition for font color changes

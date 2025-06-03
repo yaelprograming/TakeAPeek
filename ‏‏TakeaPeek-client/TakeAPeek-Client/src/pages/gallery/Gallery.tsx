@@ -46,11 +46,10 @@ export interface FilterOptions {
 const API_BASE_URL = "http://localhost:5293" // Update to your API URL
 
 export function Gallery() {
-  debugger
   console.log("Rendering Gallery component")
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down("md"))
-  const { userId, getAuthHeaders } = useCurrentUser()
+  const { userId } = useCurrentUser()
   const { enqueueSnackbar } = useSnackbar()//?
 
   const [sidebarOpen, setSidebarOpen] = useState(!isMobile)
@@ -93,7 +92,8 @@ export function Gallery() {
   }, [files, filterOptions, searchTerm])
 
   const fetchData = async (folderId: string | null) => {
-    console.log("Fetching data for folder:", folderId)
+
+    console.log("Fetching data for user:", userId)
     if (!userId) {
       enqueueSnackbar("עליך להתחבר כדי לצפות בגלריה", { variant: "warning" })
       setLoading(false)
@@ -113,12 +113,13 @@ console.log(url, "URL for fetching data")
 
       // setFolders(data.folders?.filter((folder: Folder) => !folder.isDeleted) || [])
       // setFiles(data.files?.filter((file: ImageFile) => !file.isDeleted) || [])
+      console.log("Data fetched successfully- all data:", data)
       const userFolders =
         data.folders?.filter((folder: Folder) => !folder.isDeleted && folder.ownerId === userId) || []
-
+console.log("userFolders:", userFolders)  
       const userFiles =
         data.files?.filter((file: ImageFile) => !file.isDeleted && file.ownerId === userId) || []
-
+console.log("userFiles:", userFiles)
       setFolders(userFolders)
       setFiles(userFiles)
       // Fetch breadcrumb

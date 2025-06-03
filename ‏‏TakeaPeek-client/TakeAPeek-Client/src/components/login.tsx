@@ -24,7 +24,7 @@ import { login } from '../globalStates/authSlice';
 // Custom styled components
 const primaryColor = '#001F4D'; // צבע כחול כהה
 const pinkColor = '#FF4081'; // צבע ורוד לכפתור התחברות
-const LogoRing = styled(Box)(({ theme }) => ({
+const LogoRing = styled(Box)(() => ({
     width: 200,
     height: 200,
     border: '20px solid white',
@@ -78,8 +78,8 @@ const Login = () => {
     password: ''
   });
 
-  const [rememberMe, setRememberMe] = useState(false);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  // const [rememberMe, setRememberMe] = useState(false);
+  const [_, setErrorMessage] = useState<string | null>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCredentials({
@@ -97,7 +97,7 @@ const Login = () => {
       return;
     }
   
-    const resultAction = await dispatch(login(credentials));
+    const resultAction = await dispatch(login({ Email: credentials.email, Password: credentials.password }));
   
     if (login.fulfilled.match(resultAction)) {
       navigate("/personal");

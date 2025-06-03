@@ -58,8 +58,8 @@ import { Stack, Tooltip, IconButton, TextField } from '@mui/material';
 import { theme } from '../App';
 import { Link, useNavigate } from 'react-router-dom';
 import AccountMenu from './auth/accountMenu';
-import Gallery from '../pages/gallery/Gallery';
 import Upload from '../hooks/upload';
+import { Gallery } from '../pages/gallery/Gallery';
 // import Gallery from '../page/gallery';
 
 

@@ -13,7 +13,7 @@ interface AnimatedCounterProps {
   size?: "small" | "medium" | "large"
 }
 
-const CounterTypography = styled(Typography)(({ theme }) => ({
+const CounterTypography = styled(Typography)(() => ({
   fontWeight: "bold",
   transition: "all 0.3s ease",
 }))

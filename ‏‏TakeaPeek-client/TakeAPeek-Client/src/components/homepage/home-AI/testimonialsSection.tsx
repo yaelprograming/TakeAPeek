@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { Card } from '@/components/ui/card';
 import { Quote } from 'lucide-react';
+import { Card } from '@mui/material';
 
 const testimonials = [
   {

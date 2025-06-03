@@ -14,7 +14,7 @@ interface AnimatedIconProps {
   delay?: number
 }
 
-const IconWrapper = styled(Box)<{ animation: string }>(({ theme, animation }) => ({
+const IconWrapper = styled(Box)<{ animation: string }>(({  animation }) => ({
   display: "inline-flex",
   alignItems: "center",
   justifyContent: "center",

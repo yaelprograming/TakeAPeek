@@ -108,11 +108,13 @@ const App:React.FC = () => {
             horizontal: "right",
           }}
         >
-          <AuthProvider>
-            <Provider store={store}>
-              <RouterProvider router={Router} />
-            </Provider>
-          </AuthProvider>
+          {
+            <AuthProvider>
+              <Provider store={store}>
+                <RouterProvider router={Router} />
+              </Provider>
+            </AuthProvider>
+          }
         </SnackbarProvider>
       </Box>
     </ThemeProvider>

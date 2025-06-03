@@ -2,14 +2,13 @@
 
 import { useRef } from "react"
 import { Box } from "@mui/material"
-import { EventInput } from "@fullcalendar/core";
 import dayGridPlugin from "@fullcalendar/daygrid"
 import interactionPlugin from "@fullcalendar/interaction"
 import heLocale from "@fullcalendar/core/locales/he"
 import "./calendar.css"
 import { Task } from "../../types/types"
 import FullCalendar from '@fullcalendar/react';
-import timeGridPlugin from '@fullcalendar/timegrid';
+ import timeGridPlugin from '@fullcalendar/timegrid';
 // import '@fullcalendar/core/main.css';
 // import '@fullcalendar/timegrid/main.css';
 interface CalendarProps {
@@ -64,10 +63,11 @@ const Calendar = ({ tasks, onDateClick, onTaskClick }: CalendarProps) => {
       onTaskClick(task)
     }
   }
+   const SafeFullCalendar = FullCalendar as unknown as React.FC<any>;
 
   return (
     <Box sx={{ height: "auto", minHeight: "70vh" }}>
-      <FullCalendar
+      <SafeFullCalendar
         ref={calendarRef}
         plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
         initialView="dayGridMonth"
@@ -95,7 +95,7 @@ const Calendar = ({ tasks, onDateClick, onTaskClick }: CalendarProps) => {
         }}
         dayMaxEvents={3}
         eventDisplay="block"
-        eventContent={(eventInfo) => {
+        eventContent={(eventInfo: { event: { title: string; extendedProps: { location: string }; }; view: { type: string; }; }) => {
           return (
             <Box
               sx={{

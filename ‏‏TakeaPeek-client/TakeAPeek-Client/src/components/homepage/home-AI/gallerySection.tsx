@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
-import { Button } from '@/components/ui/button';
+// import { Button } from '@/components/ui/button';
 import { ChevronRight } from 'lucide-react';
+import { Button } from '@mui/material';
 
 const GallerySection = () => {
   const [activeTab, setActiveTab] = useState('all');
@@ -89,7 +90,7 @@ const GallerySection = () => {
             >
               <div className={`w-full h-full bg-gradient-to-br ${item.color} relative`}>
                 <div className="absolute inset-0 group-hover:bg-darkblue-900/30 transition-all duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100">
-                  <Button variant="outline" size="sm" className="bg-white/90 hover:bg-white border-0">
+                  <Button variant="outlined" size="small" className="bg-white/90 hover:bg-white border-0">
                     View
                   </Button>
                 </div>
@@ -100,7 +101,7 @@ const GallerySection = () => {
         </div>
 
         <div className="mt-12 text-center">
-          <Button variant="outline" className="border-turquoise-200 text-darkblue-900 hover:bg-turquoise-50 mt-8">
+          <Button variant="outlined" className="border-turquoise-200 text-darkblue-900 hover:bg-turquoise-50 mt-8">
             View more examples <ChevronRight size={16} className="ml-2" />
           </Button>
         </div>

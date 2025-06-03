@@ -1,9 +1,7 @@
-import React from "react";
 import { Container, Typography } from "@mui/material";
 import axios from "axios";
 
 import { useSelector } from "react-redux";
-import { MyFile } from "../types/types";
 import { RootState } from "../globalStates/store";
 import FileUpload from "./fileUpload";
 
@@ -45,7 +43,7 @@ const Upload = () => {
 //         }
 //     }
 // }
-const handleUpload = async (files: MyFile[], _folderId: string) => {
+const handleUpload = async ({ files, folderId, ownerId }: { files: File[]; folderId: string; ownerId: number }) => {
   if (files.length === 0) {
       console.error("No files selected for upload.");
       return;
@@ -56,12 +54,12 @@ const handleUpload = async (files: MyFile[], _folderId: string) => {
   // Append all files correctly
   for (const file of files) {
       console.log("Uploading file:", file);
-      formData.append("files", file); // Change key to "files" (plural)
+      formData.append("files", file); // Ensure file is treated as Blob
   }
 
   // Append metadata (added only once!)
-  formData.append("FolderId", _folderId);
-  formData.append("OwnerId", user?.id ?? "0");
+  formData.append("FolderId", folderId);
+  formData.append("OwnerId", ownerId.toString());
 
   try {
       const response = await axios.post(url, formData, {
@@ -85,7 +83,13 @@ return (
       <Typography variant="h4" gutterBottom>
         Upload Files to FrameIt
       </Typography>
-      <FileUpload onUpload={handleUpload} />
+      <FileUpload 
+        onUpload={handleUpload} 
+        open={true} 
+        onClose={() => console.log("Upload dialog closed")} 
+        folderId="default-folder-id" 
+        ownerId={user?.id ?? 0} 
+      />
     </Container>
   );
 };

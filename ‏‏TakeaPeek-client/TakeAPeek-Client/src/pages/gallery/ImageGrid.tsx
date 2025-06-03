@@ -22,7 +22,6 @@ import {
   IconButton as MuiIconButton,
   Skeleton,
   Chip,
-  useTheme,
   Tooltip,
 } from "@mui/material"
 import {
@@ -52,7 +51,7 @@ interface ImageGridProps {
 }
 
 export function ImageGrid({ folders, files, onFolderClick, loading, onUpload, showBadges }: ImageGridProps) {
-  const theme = useTheme()
+  // const theme = useTheme()
   const [selectedImage, setSelectedImage] = useState<ImageFile | null>(null)
   const [lightboxIndex, setLightboxIndex] = useState<number>(-1)
   const [menuAnchorEl, setMenuAnchorEl] = useState<null | HTMLElement>(null)

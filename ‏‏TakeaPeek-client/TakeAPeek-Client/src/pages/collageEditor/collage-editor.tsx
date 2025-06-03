@@ -511,6 +511,9 @@ export interface StickersToolProps {
   onAddSticker: (sticker: string, size: number) => void;
 }
 const CollageEditor = () => {
+  const closeStickerTool = () => {
+    setShowStickersTool(false);
+  };
   const theme = useTheme()
   const [images, setImages] = useState<CollageImage[]>([])
   const [texts, setTexts] = useState<CollageText[]>([])
@@ -714,9 +717,10 @@ const CollageEditor = () => {
     setStickers([...stickers, newSticker])
   }
   
-  const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
+  const handleTabChange = (_event: React.SyntheticEvent,newValue: number) => {
     setActiveTab(newValue)
   }
+
 
   const handleFilterMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setFilterMenuAnchor(event.currentTarget)
@@ -853,7 +857,7 @@ const CollageEditor = () => {
 
       {/* Options Section */}
       <Paper sx={{ p: 3, bgcolor: theme.palette.background.paper, width: "100%" }}>
-        <Tabs value={activeTab} onChange={handleTabChange} centered sx={{ mb: 2 }}>
+        <Tabs value={activeTab} onChange={(event, newValue) => handleTabChange(event, newValue)} centered sx={{ mb: 2 }}>
           <Tab label="Templates" />
           <Tab label="Aspect Ratio" />
           <Tab label="Background" />
@@ -932,13 +936,13 @@ const CollageEditor = () => {
 {showStickersTool && (
   <Paper elevation={3} sx={{ p: 2, mt: 2 }}>
     <Typography variant="subtitle1">בחר מדבקה:</Typography>
-    <StickersTool onAddSticker={handleAddSticker} />
-  </Paper>
+    <StickersTool onSelectSticker={handleAddSticker} onClose={closeStickerTool} />
+    </Paper>
 )}{showStickersTool && (
   <Paper elevation={3} sx={{ p: 2, mt: 2 }}>
     <Typography variant="subtitle1">בחר מדבקה:</Typography>
-    <StickersTool onAddSticker={handleAddSticker} />
-  </Paper>
+    <StickersTool onSelectSticker={handleAddSticker} onClose={closeStickerTool} />
+    </Paper>
 )}
   
     </Box>

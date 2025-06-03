@@ -10,7 +10,7 @@ import Tooltip from '@mui/material/Tooltip';
 import Settings from '@mui/icons-material/Settings';
 import Logout from '@mui/icons-material/Logout';
 import { Link } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { RootState } from '../../globalStates/store';
 
 export default () => {
@@ -24,6 +24,7 @@ export default () => {
   };
 
   const user = useSelector((state: RootState) => state.user.list[state.user.list.length - 1]); // או לפי האיד של המשתמש הנוכחי אם יש לך
+  const SafeLink = Link as unknown as React.FC<{ to: string; children: React.ReactNode }>;
 
   return (
     <React.Fragment>
@@ -38,7 +39,7 @@ export default () => {
             aria-expanded={open ? 'true' : undefined}
           >
             <Avatar sx={{ width: 32, height: 32 }}>
-              {user?.name?.charAt(0).toUpperCase() ?? null}
+              {user?.Name?.charAt(0).toUpperCase() ?? null}
             </Avatar>
           </IconButton>
         </Tooltip>
@@ -82,7 +83,7 @@ export default () => {
       >
         <MenuItem onClick={handleClose}>
           <Avatar />
-          <Link to="/settings">Profile</Link> 
+          <SafeLink to="/settings">Profile</SafeLink> 
         </MenuItem>
       
         <Divider />
@@ -90,13 +91,13 @@ export default () => {
           <ListItemIcon>
             <Settings fontSize="small" />
           </ListItemIcon>
-          <Link to="/userDashboard">User Dashboard</Link>
+          <SafeLink to="/userDashboard">User Dashboard</SafeLink>
         </MenuItem>
         <MenuItem onClick={handleClose}>
           <ListItemIcon>
             <Logout fontSize="small" />
           </ListItemIcon>
-          <Link to="/login">Login</Link>
+          <SafeLink to="/login">Login</SafeLink>
         </MenuItem>
       </Menu>
     </React.Fragment>

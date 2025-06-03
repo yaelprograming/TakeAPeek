@@ -76,7 +76,7 @@ console.log("Login successful, token:", data.token)
         // פענח את ה-token כדי לקבל את פרטי המשתמש
         const decodedToken = JSON.parse(atob(data.token.split(".")[1]))
         setUser({
-          id: decodedToken.userId || decodedToken.id || decodedToken.sub,
+          id: Number(decodedToken.userId || decodedToken.id || decodedToken.sub),
           name: decodedToken.name || email.split("@")[0],
           email,
           role: decodedToken.role || "Editor",
@@ -108,7 +108,7 @@ console.log("Login successful, token:", data.token)
         // פענח את ה-token כדי לקבל את פרטי המשתמש
         const decodedToken = JSON.parse(atob(data.token.split(".")[1]))
         setUser({
-          id: decodedToken.userId || decodedToken.id || decodedToken.sub,
+          id: Number(decodedToken.userId || decodedToken.id || decodedToken.sub),
           name,
           email,
           role: decodedToken.role || "Editor",
@@ -133,7 +133,7 @@ console.log("Login successful, token:", data.token)
     <AuthContext.Provider
       value={{
         user,
-        userId: user?.id || null,
+        userId: user ? Number(user.id) : null,
         login,
         register,
         logout,

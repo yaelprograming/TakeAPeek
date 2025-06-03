@@ -323,10 +323,22 @@ const SmartFiltering = () => {
 
     // אם יש תמונה אחת בלבד, הורד אותה ישירות
     if (nonBlurryImages.length === 1) {
-      try {
-        const blob = await downloadFile(nonBlurryImages[0].id)
+
 
       try {
+
+        const blob = await downloadFile(nonBlurryImages[0].id) as unknown as Blob;
+        if (blob instanceof Blob) {
+          const url = window.URL.createObjectURL(blob)
+          const link = document.createElement("a")
+          link.href = url
+          link.setAttribute("download", nonBlurryImages[0].name || "image.jpg")
+          document.body.appendChild(link)
+          link.click()
+          link.remove()
+        }
+      try {
+        const blob = await downloadFile(nonBlurryImages[0].id) as unknown as Blob;
         if (blob instanceof Blob) {
           const url = window.URL.createObjectURL(blob)
           const link = document.createElement("a")
@@ -368,8 +380,13 @@ const SmartFiltering = () => {
       // הבטחה לכל הורדת קובץ
       const downloadPromises = nonBlurryImages.map(async (file) => {
         try {
-          const blob = await downloadFile(file.id)
-          zip.file(file.name || `image_${file.id}.jpg`, blob)
+
+          const blob = await downloadFile(file.id)as unknown as Blob;
+          if (blob instanceof Blob) {
+            zip.file(file.name || `image_${file.id}.jpg`, blob)
+          } else {
+            console.error(`Failed to download file ${file.id}: Invalid blob`)
+          }
         } catch (error) {
           console.error(`Error downloading file ${file.id}:`, error)
         }

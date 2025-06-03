@@ -62,7 +62,6 @@ export const CollageCanvas = forwardRef<HTMLDivElement, CollageCanvasProps>(
       onTextUpdate,
       onImageRemove,
       onTextRemove,
-      onTextAdd,
       filter,
     },
     ref: React.Ref<HTMLDivElement>,
@@ -526,15 +525,15 @@ export const CollageCanvas = forwardRef<HTMLDivElement, CollageCanvasProps>(
       handleColorMenuClose()
     }
 
-    const handleTextOpacityChange = (event: Event, newValue: number | number[]) => {
+    const handleTextOpacityChange = ( value: number | number[]) => {
       if (!selectedTextId) return
-
+    
       const text = texts.find((txt) => txt.id === selectedTextId)
       if (!text) return
-
+    
       onTextUpdate({
         ...text,
-        opacity: (newValue as number) / 100,
+        opacity: (value as number) / 100,
       })
     }
 
@@ -991,7 +990,7 @@ export const CollageCanvas = forwardRef<HTMLDivElement, CollageCanvasProps>(
                     <Slider
                       size="small"
                       value={text.opacity ? text.opacity * 100 : 100}
-                      onChange={handleTextOpacityChange}
+                      onChange={(_, value) => handleTextOpacityChange(value)}
                       aria-label="Opacity"
                       min={10}
                       max={100}
