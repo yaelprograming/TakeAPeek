@@ -2,13 +2,13 @@
 
 import { useRef } from "react"
 import { Box } from "@mui/material"
-import dayGridPlugin from "@fullcalendar/daygrid"
+import dayGridPlugin from "@fullcalendar/daygrid/index.js"
 import interactionPlugin from "@fullcalendar/interaction"
-import heLocale from "@fullcalendar/core/locales/he"
+import heLocale from "@fullcalendar/core/locales/he.js"
 import "./calendar.css"
 import { Task } from "../../types/types"
 import FullCalendar from '@fullcalendar/react';
- import timeGridPlugin from '@fullcalendar/timegrid';
+ import timeGridPlugin from '@fullcalendar/timegrid/index.js';
 // import '@fullcalendar/core/main.css';
 // import '@fullcalendar/timegrid/main.css';
 interface CalendarProps {
