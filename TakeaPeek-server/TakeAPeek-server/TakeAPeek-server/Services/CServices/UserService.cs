@@ -43,6 +43,7 @@ namespace TakeAPeek_server.Services.CServices
 
             // מציאת התפקיד הרצוי
             var role = await _context.Roles.FirstOrDefaultAsync(r => r.RoleName == user.Role);
+            Console.WriteLine("role: "+role.RoleName);
             Console.WriteLine($"find role:  {user.Role}");
 
             if (role == null)

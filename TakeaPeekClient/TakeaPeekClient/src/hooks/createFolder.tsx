@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { TextField, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton } from '@mui/material';
-import axios from 'axios';
 import AddIcon from '@mui/icons-material/Add'
+import axiosInstance from './axsiosInstance';
 
 const CreateFolder: React.FC = () => {
   const [folderName, setFolderName] = useState<string>(''); // שם התיקיה
@@ -26,7 +26,7 @@ const CreateFolder: React.FC = () => {
     }
 
     try {
-      await axios.post('localhost:5282/folders', { name: folderName });
+      await axiosInstance.post('/folders', { name: folderName });
       alert('התיקיה נוצרה בהצלחה!');
       handleClose();
     } catch (error) {

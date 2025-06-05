@@ -68,7 +68,7 @@
 //   const fetchAllImages = async () => {
 //     setLoading(true)
 //     try {
-//       const { data } = await axios.get(`${API_BASE_URL}/files`)
+//       const { data } = await axiosInstance.get(`${API_BASE_URL}/files`)
 //       const imageFiles = data.filter(
 //         (file: MyFile) => file.fileType?.toLowerCase().includes("image") && !file.isDeleted,
 //       )
@@ -543,7 +543,7 @@
 //   const fetchAllImages = async () => {
 //     setLoading(true)
 //     try {
-//       const { data } = await axios.get(`${API_BASE_URL}/files`)
+//       const { data } = await axiosInstance.get(`${API_BASE_URL}/files`)
 //       const imageFiles = data.filter(
 //         (file: MyFile) => file.fileType?.toLowerCase().includes("image") && !file.isDeleted,
 //       )
@@ -563,7 +563,7 @@
 //       const selectedImageIds = files.map((file) => file.id)
 
 //       // Call the batch analysis endpoint
-//       const response = await axios.post(`${API_BASE_URL}/ai/batch-analyze`, {
+//       const response = await axiosInstance.post(`${API_BASE_URL}/ai/batch-analyze`, {
 //         imageIds: selectedImageIds,
 //         analysisTypes: ["faces", "scene", "expression"],
 //       })

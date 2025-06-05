@@ -33,7 +33,7 @@
 
 //     const fetchData = async () => {
 //         try {
-//             const res = await axios.get(url + "folders");
+//             const res = await axiosInstance.get(url + "folders");
 //             setFolders(res.data);
 //         } catch (error) {
 //             console.error("Error fetching folders:", error);

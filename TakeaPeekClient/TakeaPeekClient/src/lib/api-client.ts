@@ -1,9 +1,11 @@
-import axios from "axios"
+// import axios from "axios"
 
-const API_BASE_URL = "http://localhost:5293"
+import axiosInstance from "../hooks/axsiosInstance"
 
-const apiClient = axios.create({
-  baseURL: API_BASE_URL,
+// const API_BASE_URL = "http://localhost:5293"
+
+const apiClient = axiosInstance.create({
+  // baseURL: API_BASE_URL,
   headers: {
     "Content-Type": "application/json",
   },

@@ -84,6 +84,7 @@ namespace TakeAPeek_server.Controllers
     IUserService userService) =>
             {
                 Console.WriteLine("name: " + model.Name);
+                Console.WriteLine("role: " + model.RoleName);
 
                 if (model == null)
                 {

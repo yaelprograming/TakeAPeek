@@ -1,7 +1,7 @@
 
 // const downloadFile = async (fileId:string) => {
 //   try {
-//     const response = await axios.get(`http://localhost:5293/files/${fileId}/download`, {
+//     const response = await axiosInstance.get(`http://localhost:5293/files/${fileId}/download`, {
 //       responseType: 'blob',  
 //       headers: {
 //         'Authorization': `Bearer ${localStorage.getItem('token')}`, 
@@ -19,7 +19,7 @@
 //     console.error('Error downloading file:', error);
 //   }
 // };
-const API_BASE_URL = 'http://localhost:5293'; 
+// const API_BASE_URL = 'http://localhost:5293'; 
 
 
 const downloadFile = async (fileId: string) => {
@@ -48,7 +48,7 @@ const downloadFile = async (fileId: string) => {
 const downloadFolder = async (folderId: string, folderName: string) => {
 console.log("Downloading folder with ID:", folderId);
 try {
-const response = await fetch(`${API_BASE_URL}/folders/${folderId}/download`, {
+const response = await fetch(`/folders/${folderId}/download`, {
   method: "GET",
 });
 

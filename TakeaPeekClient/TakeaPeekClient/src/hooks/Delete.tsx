@@ -1,10 +1,9 @@
-import axios from "axios";
+import axiosInstance from "./axsiosInstance";
 
-
-const BASE_URL = 'http://localhost:5293'; 
+// const BASE_URL = 'http://localhost:5293'; 
 export const deleteFile = async (fileId: string) => {
     try {
-      await axios.delete(`${BASE_URL}/${fileId}`);
+      await axiosInstance.delete(`/${fileId}`);
     } catch (error) {
       console.error('Delete failed', error);
       throw new Error('המחיקה נכשלה');

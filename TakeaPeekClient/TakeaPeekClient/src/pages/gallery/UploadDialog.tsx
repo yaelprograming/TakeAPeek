@@ -24,9 +24,10 @@ import {
   FolderOpen as FolderIcon,
   InsertDriveFile as FileIcon,
 } from "@mui/icons-material"
-import axios from "axios"
+import axiosInstance from "../../hooks/axsiosInstance"
+// import axios from "axios"
 
-const API_BASE_URL = "http://localhost:5293" // Update to your API URL
+// const API_BASE_URL = "http://localhost:5293" // Update to your API URL
 
 interface UploadDialogProps {
   open: boolean
@@ -88,7 +89,7 @@ export function UploadDialog({ open, onClose, onUploadComplete, currentFolder }:
       formData.append("OwnerId", "1") // Replace with actual user ID
 
       // Use axios to upload with progress tracking
-      await axios.post(`${API_BASE_URL}/files`, formData, {
+      await axiosInstance.post(`/files`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
         onUploadProgress: (progressEvent) => {
           if (progressEvent.total) {

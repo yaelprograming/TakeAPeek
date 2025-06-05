@@ -1,14 +1,14 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import axios from "axios";
 import { RootState } from "./store";
 import User from "../types/user";
+import axiosInstance from "../hooks/axsiosInstance";
 
-const url = "http://localhost:5293/auth"; // Adjust the URL to your API endpoint
+// const url = "http://localhost:5293/auth"; // Adjust the URL to your API endpoint
 
 // get users
 export const getUsers = createAsyncThunk('users/get', async(_, thunkApi) => {
   try {
-    const response = await axios.get(url);
+    const response = await axiosInstance.get("/auth");
     return response.data as User[];
   } catch (error) {
     return thunkApi.rejectWithValue(error);
@@ -19,7 +19,7 @@ export const getUsers = createAsyncThunk('users/get', async(_, thunkApi) => {
 export const addUser = createAsyncThunk('users/add', async (user: Partial<User>, thunkApi) => {
   try {
     
-    const response = await axios.post(url, user);
+    const response = await axiosInstance.post("/auth", user);
     return response.data as User;
   } catch (error) {
     return thunkApi.rejectWithValue(error);
@@ -29,7 +29,7 @@ export const addUser = createAsyncThunk('users/add', async (user: Partial<User>,
 // Delete user
 export const deleteUser = createAsyncThunk('users/delete', async (userId: string, thunkApi) => {
   try {
-    await axios.delete(`${url}/${userId}`);
+    await axiosInstance.delete(`/auth/${userId}`);
     return userId;
   } catch (error) {
     return thunkApi.rejectWithValue(error);

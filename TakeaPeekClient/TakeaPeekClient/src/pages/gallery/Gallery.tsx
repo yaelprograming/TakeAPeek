@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react"
 import { Box, AppBar, Toolbar, Typography, Button, IconButton, useTheme, useMediaQuery, Paper } from "@mui/material"
 import { Menu as MenuIcon, Download as DownloadIcon, Upload as UploadIcon } from "@mui/icons-material"
-import axios from "axios"
 import JSZip from "jszip"
 import { FilterSidebar } from "./FilterSidebar"
 import { ImageGrid } from "./ImageGrid"
@@ -12,6 +11,7 @@ import { SearchBar } from "./SearchBar"
 import { UploadDialog } from "./UploadDialog"
 import { useCurrentUser } from "../../hooks/useAuth"
 import { useSnackbar } from "notistack"
+import axiosInstance from "../../hooks/axsiosInstance"
 
 export interface ImageFile {
   id: string
@@ -106,8 +106,8 @@ export function Gallery() {
       // Use axios to fetch data from your API
       const url = folderId ? `${API_BASE_URL}/folders/${folderId}/contents` : `${API_BASE_URL}/folders/0/contents`
 console.log(url, "URL for fetching data")
-      const { data } = await axios.get(url)
-      // const { data } = await axios.get(url, {
+      const { data } = await axiosInstance.get(url)
+      // const { data } = await axiosInstance.get(url, {
       //   headers: getAuthHeaders(),
       // })
 
@@ -127,7 +127,7 @@ console.log("userFiles:", userFiles)
         ? `${API_BASE_URL}/folders/${folderId}/breadcrumb`
         : `${API_BASE_URL}/folders/0/breadcrumb`
 
-      const breadcrumbRes = await axios.get(breadcrumbUrl)
+      const breadcrumbRes = await axiosInstance.get(breadcrumbUrl)
       setBreadcrumb(breadcrumbRes.data)
     } catch (error) {
       console.error("Error fetching data:", error)
@@ -179,12 +179,12 @@ console.log("userFiles:", userFiles)
       for (const fileId of fileIds) {
         try {
           // Fetch the file from your API
-          const fileResponse = await axios.get(`${API_BASE_URL}/files/${fileId}/download`, {
+          const fileResponse = await axiosInstance.get(`${API_BASE_URL}/files/${fileId}/download`, {
             responseType: "blob",
           })
 
           // Get file metadata
-          const fileMetaResponse = await axios.get(`${API_BASE_URL}/files/${fileId}`)
+          const fileMetaResponse = await axiosInstance.get(`${API_BASE_URL}/files/${fileId}`)
           const fileMeta = fileMetaResponse.data
 
           // Add the file to the zip

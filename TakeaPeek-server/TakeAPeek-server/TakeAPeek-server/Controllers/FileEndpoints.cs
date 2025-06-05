@@ -38,11 +38,12 @@ namespace TakeAPeek_server.Controllers
 
                 var updatedFile = await fileService.UpdateFile(existingFile);
                 return Results.Ok(updatedFile);
-            })
-            .RequireAuthorization( "Editor", "Admin" ); 
+            });
+            //   .RequireAuthorization( "Editor", "Admin" ); 
 
 
-            app.MapDelete("/files/{id}", async (int id, IFileService fileService) => await fileService.DeleteFile(id)).RequireAuthorization( "Editor", "Admin"); 
+            app.MapDelete("/files/{id}", async (int id, IFileService fileService) => await fileService.DeleteFile(id));
+            //.RequireAuthorization( "Editor", "Admin"); 
 
             app.MapGet("/files/{id}/download", async (int id, IFileService fileService) =>
             {
@@ -61,8 +62,9 @@ namespace TakeAPeek_server.Controllers
                 {
                     return Results.NotFound(ex.Message);
                 }
-            }).RequireAuthorization(); ;
-            
+            });
+            //  .RequireAuthorization(); ;
+
             //app.MapGet("/files/{id}/download", async (int id, IFileService fileService) =>
             //{
             //    try
@@ -337,7 +339,8 @@ namespace TakeAPeek_server.Controllers
                     message = "העלאה בוצעה בהצלחה. הניתוח יתבצע ברקע.",
                     uploaded = uploadedFiles.Select(f => new { f.Id, f.FileName }),
                 });
-            }).DisableAntiforgery().RequireAuthorization("Editor", "Admin");
+            });
+               // .DisableAntiforgery().RequireAuthorization("Editor", "Admin");
 
             app.MapPost("/api/files/filter", async (
                 [FromBody] FilterRequest request,

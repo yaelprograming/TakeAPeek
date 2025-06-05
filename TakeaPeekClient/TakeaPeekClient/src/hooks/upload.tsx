@@ -1,12 +1,12 @@
 import { Container, Typography } from "@mui/material";
-import axios from "axios";
 
 import { useSelector } from "react-redux";
 import { RootState } from "../globalStates/store";
 import FileUpload from "./fileUpload";
+import axiosInstance from "./axsiosInstance";
 
 const Upload = () => {
-  const url = "http://localhost:5293/files"; // נתיב ה-API להעלאת קבצים
+  // const url = "http://localhost:5293/files"; // נתיב ה-API להעלאת קבצים
   const user = useSelector((state: RootState) => state.user.list[state.user.list.length - 1]); // או לפי האיד של המשתמש הנוכחי אם יש לך
 
 //   const handleUpload = async (files: MyFile[], _folderId: string) => {
@@ -27,7 +27,7 @@ const Upload = () => {
 //         formData.append("OwnerId", user?.id ?? '0');
 
 //         try {
-//             const response = await axios.post(url, formData, {
+//             const response = await axiosInstance.post(url, formData, {
 //                 headers: {
 //                     "Content-Type": "multipart/form-data"
 //                 }
@@ -35,7 +35,7 @@ const Upload = () => {
 
 //             console.log("File uploaded successfully:", response.data);
 //         } catch (error) {
-//             if (axios.isAxiosError(error)) {
+//             if (axiosInstance.isAxiosError(error)) {
 //                 console.error("Error uploading file:", error.response?.data || error.message);
 //             } else {
 //                 console.error("Unknown error:", error);
@@ -62,7 +62,7 @@ const handleUpload = async ({ files, folderId, ownerId }: { files: File[]; folde
   formData.append("OwnerId", ownerId.toString());
 
   try {
-      const response = await axios.post(url, formData, {
+      const response = await axiosInstance.post("", formData, {
           headers: {
               "Content-Type": "multipart/form-data"
           }
@@ -70,11 +70,12 @@ const handleUpload = async ({ files, folderId, ownerId }: { files: File[]; folde
 
       console.log("File uploaded successfully:", response.data);
   } catch (error) {
-      if (axios.isAxiosError(error)) {
-          console.error("Error uploading file:", error.response?.data || error.message);
-      } else {
-          console.error("Unknown error:", error);
-      }
+      // if (axiosInstance.isAxiosError(error)) {
+      //     console.error("Error uploading file:", error.response?.data || error.message);
+      // } else {
+      //     console.error("Unknown error:", error);
+      // }
+      console.error("Error uploading file:", error);
   }
 };
 
