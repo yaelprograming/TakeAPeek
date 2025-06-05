@@ -16,16 +16,18 @@ using Microsoft.AspNetCore.Builder;
 using TakeAPeek_server.Services.CServices.TakeAPeek_server.Services;
 using TakeAPeek_server.Services;
 
+Env.Load();
 
 var builder = WebApplication.CreateBuilder(args);
 
 //// טוען את הקובץ .env
-Env.Load();
+
 
 //// מוסיף את משתני הסביבה מהקובץ .env לקונפיגורציה
 builder.Configuration.AddEnvironmentVariables();
 
 var openAiApiKey = builder.Configuration["OPENAI_API_KEY"];
+var connectionString = builder.Configuration["CONNECTION_STRING"];
 
 // הוספת JWT Authentication
 builder.Services.AddAuthentication(options =>
@@ -56,17 +58,19 @@ builder.Services.AddAuthorization(options =>
 });
 
 
-builder.Services.AddDbContext<DataContext>(options =>
-{
-    var x = builder.Configuration["CONNECTION_STRING"];
-    Console.WriteLine($"Connection: {x}");
-    options.UseMySql(
-        x,
-        ServerVersion.AutoDetect(x),
-        mySqlOptions => mySqlOptions.EnableRetryOnFailure()
-    );
-});
+//builder.Services.AddDbContext<DataContext>(options =>
+//{
+//    var x = builder.Configuration["CONNECTION_STRING"];
+//    Console.WriteLine($"Connection: {x}");
+//    options.UseMySql(
+//        x,
+//        ServerVersion.AutoDetect(x),
+//        mySqlOptions => mySqlOptions.EnableRetryOnFailure()
+//    );
+//});
 
+builder.Services.AddDbContext<DataContext>(options =>
+    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 
 // =========== add services =========== 
 builder.Services.AddScoped<IFileService, FileService>();

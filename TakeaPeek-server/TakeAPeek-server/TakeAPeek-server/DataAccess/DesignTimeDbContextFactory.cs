@@ -8,7 +8,7 @@ public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<DataContex
 {
     public DataContext CreateDbContext(string[] args)
     {
-        DotNetEnv.Env.Load(); // !!! תוסיף את זה כאן !!!
+        DotNetEnv.Env.Load(); 
 
         var configuration = new ConfigurationBuilder()
             .AddEnvironmentVariables()
