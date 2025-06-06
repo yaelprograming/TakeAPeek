@@ -86,6 +86,8 @@ builder.Services.AddScoped<IAIService, AIService>();
 builder.Services.AddScoped<IImageAnalysisService, ImageAnalysisService>();
 builder.Services.AddScoped<IEventService, EventService>();
 
+builder.Services.AddAntiforgery();
+
 Console.WriteLine($"AWS Region: {builder.Configuration["AWS:Region"]}");
 Console.WriteLine($"AWS Access Key ID: {builder.Configuration["AWS:AccessKeyId"]}");
 Console.WriteLine($"AWS Secret Access Key: {builder.Configuration["AWS:SecretAccessKey"]}");
@@ -159,6 +161,7 @@ app.UseSwaggerUI(c =>
     c.RoutePrefix = string.Empty; // זה מגדיר שה-Swagger UI יהיה ב-root של האפליקציה
 });
 
+app.UseAntiforgery();
 // =========== endpoints injection ===========
 FileEndpoints.MapFileEndpoints(app);
 FolderEndpoints.MapFolderEndpoints(app);

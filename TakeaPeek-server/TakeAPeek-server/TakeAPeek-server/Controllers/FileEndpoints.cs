@@ -19,10 +19,12 @@ namespace TakeAPeek_server.Controllers
     {
         public static void MapFileEndpoints(WebApplication app)
         {
-            app.MapGet("/files", async (IFileService fileService) => await fileService.GetAllFiles());
+            app.MapGet("/files", async (IFileService fileService) => await fileService.GetAllFiles()).DisableAntiforgery();
+            
 
-            app.MapGet("/files/{id}", async (int id, IFileService fileService) => await fileService.GetFile(id))
-            ;
+            app.MapGet("/files/{id}", async (int id, IFileService fileService) => await fileService.GetFile(id)).DisableAntiforgery();
+
+            
 
             // app.MapPost("/files", async (TakeAPeek_server.Entities.File file, IFileService fileService) => await fileService.CreateFile(file));
             // .RequireAuthorization("Editor", "Admin"); ;
@@ -38,11 +40,13 @@ namespace TakeAPeek_server.Controllers
 
                 var updatedFile = await fileService.UpdateFile(existingFile);
                 return Results.Ok(updatedFile);
-            });
+            }).DisableAntiforgery();
+            
             //   .RequireAuthorization( "Editor", "Admin" ); 
 
 
-            app.MapDelete("/files/{id}", async (int id, IFileService fileService) => await fileService.DeleteFile(id));
+            app.MapDelete("/files/{id}", async (int id, IFileService fileService) => await fileService.DeleteFile(id)).DisableAntiforgery();
+
             //.RequireAuthorization( "Editor", "Admin"); 
 
             app.MapGet("/files/{id}/download", async (int id, IFileService fileService) =>
@@ -62,7 +66,8 @@ namespace TakeAPeek_server.Controllers
                 {
                     return Results.NotFound(ex.Message);
                 }
-            });
+            }).DisableAntiforgery();
+
             //  .RequireAuthorization(); ;
 
             //app.MapGet("/files/{id}/download", async (int id, IFileService fileService) =>
@@ -302,6 +307,7 @@ namespace TakeAPeek_server.Controllers
 
                     _ = Task.Run(async () =>
                     {
+                        createdFile.AnalysisCompletedIs = false;
                         using var scope = serviceProvider.CreateScope(); // ⬅️ זה יוצר scope חדש
                         var scopedDb = scope.ServiceProvider.GetRequiredService<DataContext>();
 
@@ -339,8 +345,9 @@ namespace TakeAPeek_server.Controllers
                     message = "העלאה בוצעה בהצלחה. הניתוח יתבצע ברקע.",
                     uploaded = uploadedFiles.Select(f => new { f.Id, f.FileName }),
                 });
-            });
-               // .DisableAntiforgery().RequireAuthorization("Editor", "Admin");
+            }).DisableAntiforgery();
+            
+            // .DisableAntiforgery().RequireAuthorization("Editor", "Admin");
 
             app.MapPost("/api/files/filter", async (
                 [FromBody] FilterRequest request,
@@ -365,7 +372,8 @@ namespace TakeAPeek_server.Controllers
                 {
                     return Results.Problem($"Internal server error: {ex.Message}", statusCode: 500);
                 }
-            });
+            }).DisableAntiforgery();
+            
 
 
             app.MapPost("/api/files/download-filtered", async (
@@ -403,7 +411,8 @@ namespace TakeAPeek_server.Controllers
                 {
                     return Results.Problem($"Internal server error: {ex.Message}", statusCode: 500);
                 }
-            });
+            }).DisableAntiforgery();
+
 
 
         }
