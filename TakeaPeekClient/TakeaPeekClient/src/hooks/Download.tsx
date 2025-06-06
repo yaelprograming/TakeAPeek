@@ -8,6 +8,8 @@
 //       },
 //     });
 
+import axiosInstance from "./axsiosInstance";
+
 //     const url = window.URL.createObjectURL(new Blob([response.data]));
 //     const link = document.createElement('a');
 //     link.href = url;
@@ -24,7 +26,7 @@
 
 const downloadFile = async (fileId: string) => {
   console.log("Downloading file with ID:", fileId);
-  const response = await fetch(`/files/${fileId}/download`);
+  const response = await fetch(`${axiosInstance.defaults.baseURL}/files/${fileId}/download`);
   if (!response.ok) {
     console.error("שגיאה בהורדת הקובץ");
     return;

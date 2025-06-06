@@ -2,6 +2,7 @@
 
 import type React from "react"
 import { createContext, useContext, useState, useEffect, type ReactNode } from "react"
+import axiosInstance from "../hooks/axsiosInstance"
 
 interface User {
   id: string | number // הוסף את ה-ID
@@ -37,7 +38,7 @@ interface AuthProviderProps {
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null)
   const [isAuthenticated, setIsAuthenticated] = useState(false)
-  const API_BASE_URL = "http://localhost:5293/Auth" // Update to your API URL
+  // const API_BASE_URL = "http://localhost:5293/Auth" // Update to your API URL
 
   useEffect(() => {
     const token = localStorage.getItem("token")
@@ -61,7 +62,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const login = async (email: string, password: string): Promise<boolean> => {
     try {
-      const response = await fetch( `${API_BASE_URL}/login`, {
+      console.log("axiosInstance.apply", axiosInstance.apply) 
+      console.log("==========axiosInstance.defaults", axiosInstance.defaults)
+      console.log("==========axiosInstance.defaults.baseURL", axiosInstance.defaults.baseURL)
+      const response = await fetch( `${axiosInstance.defaults.baseURL}/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -93,7 +97,7 @@ console.log("Login successful, token:", data.token)
 
   const register = async (name: string, email: string, password: string): Promise<boolean> => {
     try {
-      const response = await fetch(`${API_BASE_URL}/register`, {
+      const response = await fetch(`${axiosInstance.defaults.baseURL}/auth/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

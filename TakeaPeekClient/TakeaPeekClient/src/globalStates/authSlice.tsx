@@ -22,7 +22,7 @@ export const login = createAsyncThunk(
   "auth/login",
   async (credentials: { Email: string; Password: string }, thunkAPI) => {
     try {
-      const response = await axiosInstance.post<{ token: string; user: User }>("http://localhost:5293/auth/login", credentials);
+      const response = await axiosInstance.post<{ token: string; user: User }>(`${axiosInstance.defaults.baseURL}/auth/login`, credentials);
       return response.data;
     } catch (error: any) {
       return thunkAPI.rejectWithValue(error.response?.data?.message || "Login failed");
@@ -36,7 +36,7 @@ export const register = createAsyncThunk(
   async (newUser: {Name:string,  Email: string; Password: string; }, thunkAPI) => {
     try {
 
-      const response = await axiosInstance.post('http://localhost:5293/auth/register', {...newUser, roleName: 'Editor'});
+      const response = await axiosInstance.post(`${axiosInstance.defaults.baseURL}/auth/register`, {...newUser, roleName: 'Editor'});
 
       return response.data;
     } catch (error) {

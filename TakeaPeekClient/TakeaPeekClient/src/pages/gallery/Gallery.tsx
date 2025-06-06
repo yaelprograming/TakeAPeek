@@ -43,7 +43,7 @@ export interface FilterOptions {
   category: string | null
 }
 
-const API_BASE_URL = "http://localhost:5293" // Update to your API URL
+// const API_BASE_URL = "http://localhost:5293" // Update to your API URL
 
 export function Gallery() {
   console.log("Rendering Gallery component")
@@ -104,7 +104,7 @@ export function Gallery() {
     console.log("Fetching data for folder:", folderId)
     try {
       // Use axios to fetch data from your API
-      const url = folderId ? `${API_BASE_URL}/folders/${folderId}/contents` : `${API_BASE_URL}/folders/0/contents`
+      const url = folderId ? `/folders/${folderId}/contents` : `/folders/0/contents`
 console.log(url, "URL for fetching data")
       const { data } = await axiosInstance.get(url)
       // const { data } = await axiosInstance.get(url, {
@@ -124,8 +124,8 @@ console.log("userFiles:", userFiles)
       setFiles(userFiles)
       // Fetch breadcrumb
       const breadcrumbUrl = folderId
-        ? `${API_BASE_URL}/folders/${folderId}/breadcrumb`
-        : `${API_BASE_URL}/folders/0/breadcrumb`
+        ? `/folders/${folderId}/breadcrumb`
+        : `/folders/0/breadcrumb`
 
       const breadcrumbRes = await axiosInstance.get(breadcrumbUrl)
       setBreadcrumb(breadcrumbRes.data)
@@ -179,12 +179,12 @@ console.log("userFiles:", userFiles)
       for (const fileId of fileIds) {
         try {
           // Fetch the file from your API
-          const fileResponse = await axiosInstance.get(`${API_BASE_URL}/files/${fileId}/download`, {
+          const fileResponse = await axiosInstance.get(`/files/${fileId}/download`, {
             responseType: "blob",
           })
 
           // Get file metadata
-          const fileMetaResponse = await axiosInstance.get(`${API_BASE_URL}/files/${fileId}`)
+          const fileMetaResponse = await axiosInstance.get(`/files/${fileId}`)
           const fileMeta = fileMetaResponse.data
 
           // Add the file to the zip

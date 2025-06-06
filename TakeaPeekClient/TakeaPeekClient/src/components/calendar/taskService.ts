@@ -1,6 +1,7 @@
+import axiosInstance from "../../hooks/axsiosInstance"
 import { Task } from "../../types/types"
 
-const API_URL = "http://localhost:5293/events"
+const API_URL = axiosInstance.defaults.baseURL + "/tasks"
 // const getAuthToken = () => {
 //   return localStorage.getItem('authToken');
 // };
