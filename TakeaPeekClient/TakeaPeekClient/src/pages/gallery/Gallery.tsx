@@ -5,13 +5,14 @@ import { Box, AppBar, Toolbar, Typography, Button, IconButton, useTheme, useMedi
 import { Menu as MenuIcon, Download as DownloadIcon, Upload as UploadIcon } from "@mui/icons-material"
 import JSZip from "jszip"
 import { FilterSidebar } from "./FilterSidebar"
-import { ImageGrid } from "./ImageGrid"
+// import { ImageGrid } from "./ImageGrid"
 import { Breadcrumb } from "./Breadcrumb"
 import { SearchBar } from "./SearchBar"
 import { UploadDialog } from "./UploadDialog"
 import { useCurrentUser } from "../../hooks/useAuth"
 import { useSnackbar } from "notistack"
 import axiosInstance from "../../hooks/axsiosInstance"
+import { ImageGrid } from "./ImageGrid"
 
 export interface ImageFile {
   id: string
@@ -268,6 +269,7 @@ console.log("userFiles:", userFiles)
               onUpload={() => setUploadDialogOpen(true)}
               showBadges={showBadges}
             />
+
           </Box>
         </Box>
 

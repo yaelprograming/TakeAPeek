@@ -40,6 +40,7 @@ import {
 import type { ImageFile, Folder } from "./Gallery"
 import { Button } from "./Button"
 import { downloadFile, downloadFolder } from "../../hooks/Download"
+import { deleteFile, deleteFolder } from "../../hooks/Delete"
 
 interface ImageGridProps {
   folders: Folder[]
@@ -91,6 +92,26 @@ export function ImageGrid({ folders, files, onFolderClick, loading, onUpload, sh
   const handleMenuClose = () => {
     setMenuAnchorEl(null)
     setActiveItemId(null)
+  }
+
+  const handleDelete = async () => {
+    console.log("Deleting item with ID:", activeItemId)
+    const folder = folders.find((f) => f.id === activeItemId)
+    const file = files.find((f) => f.id === activeItemId)
+  
+    try {
+      if (folder) {
+        console.log("Deleting folder:", folder)
+       await  deleteFolder(folder.id)
+      } else if (file) {
+        console.log("Deleting file:", file)
+         deleteFile(file.id)
+      }
+      // אופציונלי: עדכון של הרשימה לאחר מחיקה
+    } catch (error) {
+      console.error("מחיקה נכשלה", error)
+    }
+  
   }
 
   const handleDownload = () => {
@@ -317,7 +338,8 @@ export function ImageGrid({ folders, files, onFolderClick, loading, onUpload, sh
      <MenuItem
   onClick={() => {
     handleMenuClose()
-    handleDownload()
+     handleDownload()
+
   }}
 >
   <ListItemIcon>
@@ -332,7 +354,11 @@ export function ImageGrid({ folders, files, onFolderClick, loading, onUpload, sh
           </ListItemIcon>
           <ListItemText>Share</ListItemText>
         </MenuItem>
-        <MenuItem onClick={handleMenuClose} sx={{ color: "error.main" }}>
+
+        <MenuItem   onClick={() => {
+    handleMenuClose()
+    handleDelete() 
+  }} sx={{ color: "error.main" }}>
           <ListItemIcon>
             <DeleteIcon fontSize="small" color="error" />
           </ListItemIcon>

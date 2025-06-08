@@ -790,6 +790,7 @@ import { AnimatePresence, motion } from "framer-motion"
 export const GradientTypography = React.forwardRef<HTMLSpanElement, TypographyProps>(
     function GradientTypography(props, ref) {
       return (
+        
         <Typography
           {...props}
           ref={ref}
@@ -809,6 +810,7 @@ const GradientButton = React.forwardRef(function GradientButton(
   props: React.ComponentProps<typeof Button> & { sx?: object },
 ) {
     return (
+      
       <Button
         {...props} // Spread all props to the Button component
         sx={{
@@ -903,6 +905,8 @@ const HomePage = () => {
       }}
     >
       <Header/>
+      <p>אם אתם רוצים לראות הגלריה, בלי להצטרך להעלות תמונות<br></br>תכנסו ממשתמש: y0548566763@... סיסמה:123456</p>
+
       {/* חלק עליון - גיבור */}
       <Box
         sx={{

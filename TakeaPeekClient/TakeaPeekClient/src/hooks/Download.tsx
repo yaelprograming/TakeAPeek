@@ -50,7 +50,7 @@ const downloadFile = async (fileId: string) => {
 const downloadFolder = async (folderId: string, folderName: string) => {
 console.log("Downloading folder with ID:", folderId);
 try {
-const response = await fetch(`/folders/${folderId}/download`, {
+const response = await fetch(`${axiosInstance.defaults.baseURL}/folders/${folderId}/download`, {
   method: "GET",
 });
 
