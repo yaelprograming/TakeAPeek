@@ -4,10 +4,7 @@ import { twMerge } from "tailwind-merge"
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
-
-// פונקציות עזר לקריאות API
 export const apiClient = {
-  // GET request עם authentication
   get: async (url: string) => {
     const token = localStorage.getItem("token")
     const response = await fetch(url, {

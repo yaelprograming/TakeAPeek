@@ -6,43 +6,8 @@ import FileUpload from "./fileUpload";
 import axiosInstance from "./axsiosInstance";
 
 const Upload = () => {
-  // const url = "http://localhost:5293/files"; // נתיב ה-API להעלאת קבצים
   const user = useSelector((state: RootState) => state.user.list[state.user.list.length - 1]); // או לפי האיד של המשתמש הנוכחי אם יש לך
 
-//   const handleUpload = async (files: MyFile[], _folderId: string) => {
-//     const formData = new FormData();
-
-//     for (const file of files) {
-//         console.log(file);
-//         formData.append("file", file); // הוספת הקובץ לפורמט הנכון
-
-
-//         // הוספת מטא-דאטה עם פרטי הקובץ
-//         formData.append("FileName", file.name);
-//         formData.append("FileType", file.fileType);
-//         formData.append("FolderId", _folderId);
-//         formData.append("Size", file.size);
-//         formData.append("S3Key", `${_folderId}/${file.name}`);
-//         formData.append("IsDeleted", "false");
-//         formData.append("OwnerId", user?.id ?? '0');
-
-//         try {
-//             const response = await axiosInstance.post(url, formData, {
-//                 headers: {
-//                     "Content-Type": "multipart/form-data"
-//                 }
-//             });
-
-//             console.log("File uploaded successfully:", response.data);
-//         } catch (error) {
-//             if (axiosInstance.isAxiosError(error)) {
-//                 console.error("Error uploading file:", error.response?.data || error.message);
-//             } else {
-//                 console.error("Unknown error:", error);
-//             }
-//         }
-//     }
-// }
 const handleUpload = async ({ files, folderId, ownerId }: { files: File[]; folderId: string; ownerId: number }) => {
   if (files.length === 0) {
       console.error("No files selected for upload.");
@@ -70,11 +35,7 @@ const handleUpload = async ({ files, folderId, ownerId }: { files: File[]; folde
 
       console.log("File uploaded successfully:", response.data);
   } catch (error) {
-      // if (axiosInstance.isAxiosError(error)) {
-      //     console.error("Error uploading file:", error.response?.data || error.message);
-      // } else {
-      //     console.error("Unknown error:", error);
-      // }
+    
       console.error("Error uploading file:", error);
   }
 };

@@ -98,7 +98,7 @@ export function ImageGrid({ folders, files, onFolderClick, loading, onUpload, sh
     console.log("Deleting item with ID:", activeItemId)
     const folder = folders.find((f) => f.id === activeItemId)
     const file = files.find((f) => f.id === activeItemId)
-  
+
     try {
       if (folder) {
         console.log("Deleting folder:", folder)
@@ -358,6 +358,7 @@ export function ImageGrid({ folders, files, onFolderClick, loading, onUpload, sh
         <MenuItem   onClick={() => {
     handleMenuClose()
     handleDelete() 
+
   }} sx={{ color: "error.main" }}>
           <ListItemIcon>
             <DeleteIcon fontSize="small" color="error" />

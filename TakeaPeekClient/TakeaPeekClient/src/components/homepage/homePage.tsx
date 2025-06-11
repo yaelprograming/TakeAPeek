@@ -1,23 +1,10 @@
-// import { Box } from "@mui/material";
-// import HeroSection from "./heroSection";
-
-// function HomePage() {
-//     return (
-//       <Box sx={{width:"100%"}}>
-//         homePage
-//         <HeroSection></HeroSection>
-//       </Box>
-      
-//     );
-//   }
-  
-//   export default HomePage;
 
 import { useState, useEffect } from "react";
 import { Container, Box, Typography, Button, Grid, Card, CardContent } from "@mui/material";
 import { motion } from "framer-motion";
 
 const HeroSection = () => {
+  console.log("Rendering HeroSection");
   const images = [
     "img/img1.jpg",
     "img/img2.jpg",
