@@ -6,12 +6,13 @@ import Calendar from "../components/calendar/Calendar"
 import TaskModal from "../components/calendar/TaskModal"
 import { taskService } from "../components/calendar/taskService"
 import { Task } from "../types/types"
+import dayjs, { Dayjs } from 'dayjs'
 
 const PhotographerCalendar = () => {
   const [isLoading, setIsLoading] = useState(true)
   const [tasks, setTasks] = useState<Task[]>([])
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null)
+  const [selectedDate, setSelectedDate] = useState<Dayjs  | null>(null)
   const [selectedTask, setSelectedTask] = useState<Task | null>(null)
   const [snackbar, setSnackbar] = useState<{
     open: boolean
@@ -43,14 +44,14 @@ const PhotographerCalendar = () => {
   }, [])
 
   const handleDateClick = (date: Date) => {
-    setSelectedDate(date)
+    setSelectedDate(dayjs(date))
     setSelectedTask(null)
     setIsModalOpen(true)
   }
 
   const handleTaskClick = (task: Task) => {
     setSelectedTask(task)
-    setSelectedDate(new Date(task.startTime))
+    setSelectedDate(dayjs(task.startTime))
     setIsModalOpen(true)
   }
 

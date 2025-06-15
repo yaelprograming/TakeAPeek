@@ -7,17 +7,11 @@ import { Provider } from 'react-redux';
 import store from './globalStates/store';
 import { SnackbarProvider } from 'notistack';
 import { AuthProvider } from './components/AuthContext';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 export const theme = createTheme({
-  // palette: {
-  //   primary: {
-  //     main: '#0c678d', 
-  //   },
-  //   secondary: {
-  //     main: '#0d818f', 
-  //   },
-  // },
-    // direction: "rtl",
+
     palette: {
       primary: {
         main: "#0d818f",
@@ -77,24 +71,8 @@ export const theme = createTheme({
   })
 
 
-/*
-primary: 
-secondary:
-... #0aa997
-*/ 
-
 const App:React.FC = () => {
 
-  // return (
-  //   <>
-  //   <ThemeProvider theme={theme}>
-  //     <Provider store={store}>
-  //       <RouterProvider router={Router} />
-  //     </Provider>
-  //   </ThemeProvider>
-
-  // </> 
-  // )
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -108,13 +86,23 @@ const App:React.FC = () => {
             horizontal: "right",
           }}
         >
-          {
+          {/* {
             <AuthProvider>
               <Provider store={store}>
                 <RouterProvider router={Router} />
               </Provider>
             </AuthProvider>
           }
+
+        </SnackbarProvider> */}
+
+<LocalizationProvider dateAdapter={AdapterDayjs}>
+            <AuthProvider>
+              <Provider store={store}>
+                <RouterProvider router={Router} />
+              </Provider>
+            </AuthProvider>
+          </LocalizationProvider>
         </SnackbarProvider>
       </Box>
     </ThemeProvider>

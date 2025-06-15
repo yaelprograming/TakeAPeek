@@ -1,19 +1,17 @@
 import axiosInstance from "../../hooks/axsiosInstance"
 import { Task } from "../../types/types"
 
-const API_URL = axiosInstance.defaults.baseURL + "/tasks"
-// const getAuthToken = () => {
-//   return localStorage.getItem('authToken');
-// };
+const API_URL = axiosInstance.defaults.baseURL + "/events"
 
-// // פונקציה לקבלת מזהה המשתמש
-// const getUserId = () => {
-//   // return localStorage.getItem('userId');
-//   return "1"; // החזר מזהה דוגמה
-// };
 export const taskService = {
-  async getTasks(): Promise<Task[]> {
-    const response = await fetch(API_URL)
+  async getTasks(): Promise<Task[]>{
+    const token = localStorage.getItem("token")
+    const response = await fetch(`${API_URL}/user`, {
+      headers: {
+        "Authorization": `Bearer ${token}`,
+        // "Content-Type": "application/json",     
+       }
+    })
     if (!response.ok) {
       throw new Error("Failed to fetch tasks")
     }

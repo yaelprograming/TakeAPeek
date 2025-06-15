@@ -26,24 +26,26 @@ import {
   Delete as DeleteIcon,
 } from "@mui/icons-material"
 import { Task } from "../../types/types"
+import dayjs, { Dayjs } from 'dayjs';
 
 interface TaskModalProps {
   open: boolean
   onClose: () => void
   onSave: (task: Partial<Task>) => void
   onDelete: (taskId: string) => void
-  selectedDate: Date | null
+  selectedDate: Dayjs  | null
   task: Task | null
 }
 
 const TaskModal = ({ open, onClose, onSave, onDelete, selectedDate, task }: TaskModalProps) => {
+  console.log("TaskModal rendered with task:", task)
   const [formData, setFormData] = useState<{
     title: string
     description: string
     location: string
-    date: Date | null
-    startTime: Date | null
-    endTime: Date | null
+    date: Dayjs  | null
+    startTime: Dayjs  | null
+    endTime: Dayjs  | null
     email: string
   }>({
     title: "",
@@ -55,29 +57,12 @@ const TaskModal = ({ open, onClose, onSave, onDelete, selectedDate, task }: Task
     email: "",
   })
 
+  
   useEffect(() => {
-    if (selectedDate) {
-      const formattedDate = new Date(selectedDate)
-      const startTime = new Date(formattedDate)
-      const endTime = new Date(formattedDate)
-
-      // Set default times (e.g., current hour and current hour + 1)
-      const currentHour = new Date().getHours()
-      startTime.setHours(currentHour, 0, 0)
-      endTime.setHours(currentHour + 1, 0, 0)
-
-      setFormData((prev) => ({
-        ...prev,
-        date: formattedDate,
-        startTime,
-        endTime,
-      }))
-    }
-
     if (task) {
-      const startDate = new Date(task.startTime)
-      const endDate = new Date(task.endTime)
-
+      const startDate = dayjs(task.startTime)
+      const endDate = dayjs(task.endTime)
+  
       setFormData({
         title: task.title,
         description: task.description || "",
@@ -87,37 +72,52 @@ const TaskModal = ({ open, onClose, onSave, onDelete, selectedDate, task }: Task
         endTime: endDate,
         email: task.email || "",
       })
+    } else if (selectedDate) {
+      const formattedDate = dayjs(selectedDate)
+      const currentHour = dayjs().hour()
+      const startTime = formattedDate.hour(currentHour).minute(0)
+      const endTime = formattedDate.hour(currentHour + 1).minute(0)
+  
+      setFormData({
+        title: "",
+        description: "",
+        location: "",
+        date: formattedDate,
+        startTime,
+        endTime,
+        email: "",
+      })
+    } else {
+      setFormData({
+        title: "",
+        description: "",
+        location: "",
+        date: null,
+        startTime: null,
+        endTime: null,
+        email: "",
+      })
     }
   }, [selectedDate, task, open])
+
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
     setFormData((prev) => ({ ...prev, [name]: value }))
   }
 
-  const handleDateChange = (date: Date | null) => {
-    if (!date) return
 
-    // When date changes, keep the same time but update the date
-    let newStartTime = formData.startTime
-    let newEndTime = formData.endTime
-
-    if (newStartTime) {
-      newStartTime = new Date(date)
-      newStartTime.setHours(
-        formData.startTime?.getHours() || new Date().getHours(),
-        formData.startTime?.getMinutes() || 0,
-      )
-    }
-
-    if (newEndTime) {
-      newEndTime = new Date(date)
-      newEndTime.setHours(
-        formData.endTime?.getHours() || new Date().getHours() + 1,
-        formData.endTime?.getMinutes() || 0,
-      )
-    }
-
+  const handleDateChange = (date: Dayjs | null) => {
+    if (!date) return;
+  
+    const newStartTime = date
+      ? date.hour(formData.startTime?.hour() || 0).minute(formData.startTime?.minute() || 0)
+      : null;
+  
+    const newEndTime = date
+      ? date.hour(formData.endTime?.hour() || 1).minute(formData.endTime?.minute() || 0)
+      : null;
+  
     setFormData((prev) => ({
       ...prev,
       date,
@@ -126,24 +126,14 @@ const TaskModal = ({ open, onClose, onSave, onDelete, selectedDate, task }: Task
     }))
   }
 
-  const handleStartTimeChange = (time: Date | null) => {
-    if (!time) return
-
-    // Create a new date with the current selected date but with updated time
-    const newTime = new Date(formData.date || new Date())
-    newTime.setHours(time.getHours(), time.getMinutes())
-
-    setFormData((prev) => ({ ...prev, startTime: newTime }))
+  const handleStartTimeChange = (time: Dayjs | null) => {
+    if (!time) return;
+    setFormData((prev) => ({ ...prev, startTime: time }))
   }
-
-  const handleEndTimeChange = (time: Date | null) => {
-    if (!time) return
-
-    // Create a new date with the current selected date but with updated time
-    const newTime = new Date(formData.date || new Date())
-    newTime.setHours(time.getHours(), time.getMinutes())
-
-    setFormData((prev) => ({ ...prev, endTime: newTime }))
+  
+  const handleEndTimeChange = (time: Dayjs | null) => {
+    if (!time) return;
+    setFormData((prev) => ({ ...prev, endTime: time }))
   }
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -159,8 +149,8 @@ const TaskModal = ({ open, onClose, onSave, onDelete, selectedDate, task }: Task
       title: formData.title,
       description: formData.description,
       location: formData.location,
-      startTime: formData.startTime.toISOString(),
-      endTime: formData.endTime.toISOString(),
+      startTime: formData.startTime?.toISOString(),
+      endTime: formData.endTime?.toISOString(),
       email: formData.email,
     }
 
@@ -337,5 +327,7 @@ const TaskModal = ({ open, onClose, onSave, onDelete, selectedDate, task }: Task
     </Dialog>
   )
 }
+
+
 
 export default TaskModal

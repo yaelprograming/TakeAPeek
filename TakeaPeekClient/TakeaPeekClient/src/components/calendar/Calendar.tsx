@@ -35,21 +35,15 @@ const Calendar = ({ tasks, onDateClick, onTaskClick }: CalendarProps) => {
   }))
 
   function getEventColor(task: Task) {
-    // Generate a color based on the event type or other criteria
-    const colors = [
-      "#8B5CF6", // Purple
-      "#EC4899", // Pink
-      "#3B82F6", // Blue
-      "#10B981", // Green
-      "#F59E0B", // Amber
-    ]
-
-    // Simple hash function to get consistent colors for the same event types
-    const hash = task.title.split("").reduce((acc, char) => {
-      return char.charCodeAt(0) + acc
-    }, 0)
-
-    return colors[hash % colors.length]
+    const now = new Date()
+    const start = new Date(task.startTime)
+    const diffInMs = start.getTime() - now.getTime()
+    const diffInDays = diffInMs / (1000 * 60 * 60 * 24)
+  
+    if (diffInDays < 0) return "rgb(193, 240, 240)" // אפור מטושטש – משימה שעברה
+    if (diffInDays <= 1) return "#EF4444" // אדום – ממש קרוב
+    if (diffInDays <= 7) return "#F97316" // כתום – בקרוב
+    return "#10B981" // ירוק – זמן רחוק
   }
 
   const handleDateClick = (info: any) => {

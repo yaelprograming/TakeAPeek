@@ -1,73 +1,140 @@
-import React, { useState } from 'react';
-import { TextField, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add'
-import axiosInstance from './axsiosInstance';
+"use client"
 
-const CreateFolder: React.FC = () => {
-  const [folderName, setFolderName] = useState<string>(''); // שם התיקיה
-  const [openDialog, setOpenDialog] = useState<boolean>(false); // האם הדיאלוג פתוח
+import { useState } from "react"
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Button,
+  TextField,
+  Box,
+  Typography,
+  IconButton,
+} from "@mui/material"
+import { Close as CloseIcon, CreateNewFolder as FolderIcon } from "@mui/icons-material"
 
-  // פונקציה לפתיחת הדיאלוג
-  const handleClick = () => {
-    setOpenDialog(true);
-  };
+interface CreateFolderProps {
+  open: boolean
+  onClose: () => void
+  onCreateFolder: (folderName: string) => void
+}
 
-  // פונקציה לסגירת הדיאלוג
+export function CreateFolder({ open, onClose, onCreateFolder }: CreateFolderProps) {
+  const [folderName, setFolderName] = useState("")
+  const [error, setError] = useState("")
+
+  const handleSubmit = () => {
+    // Validate folder name
+    if (!folderName.trim()) {
+      setError("שם התיקיה לא יכול להיות ריק")
+      return
+    }
+
+    // Check for invalid characters
+    const invalidChars = /[\\/:*?"<>|]/
+    if (invalidChars.test(folderName)) {
+      setError('שם התיקיה לא יכול להכיל את התווים הבאים: \\ / : * ? " < > |')
+      return
+    }
+
+    onCreateFolder(folderName)
+    setFolderName("")
+    setError("")
+    onClose()
+  }
+
   const handleClose = () => {
-    setOpenDialog(false);
-    setFolderName(''); // מנקה את שם התיקיה אחרי סגירת הדיאלוג
-  };
-
-  // פונקציה לשליחת הנתונים לשרת
-  const handleCreateFolder = async () => {
-    if (folderName.trim() === '') {
-      alert('אנא הזן שם לתיקיה');
-      return;
-    }
-
-    try {
-      await axiosInstance.post('/folders', { name: folderName });
-      alert('התיקיה נוצרה בהצלחה!');
-      handleClose();
-    } catch (error) {
-      alert('שגיאה ביצירת התיקיה');
-      console.error(error);
-    }
-  };
+    setFolderName("")
+    setError("")
+    onClose()
+  }
 
   return (
-    <div>
-       <IconButton color="primary" onClick={handleClick}>
-            <AddIcon />
-            new folder
+    <Dialog
+      open={open}
+      onClose={handleClose}
+      PaperProps={{
+        sx: {
+          borderRadius: "12px",
+          width: "100%",
+          maxWidth: "450px",
+        },
+      }}
+    >
+      <DialogTitle
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          bgcolor: "primary.main",
+          color: "white",
+          py: 2,
+        }}
+      >
+        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+          <FolderIcon />
+          <Typography variant="h6">יצירת תיקיה חדשה</Typography>
+        </Box>
+        <IconButton onClick={handleClose} sx={{ color: "white" }}>
+          <CloseIcon />
         </IconButton>
+      </DialogTitle>
 
-      <Dialog open={openDialog} onClose={handleClose}>
-        <DialogTitle>create new folder</DialogTitle>
-        <DialogContent>
-          <TextField
-            autoFocus
-            margin="dense"
-            id="folderName"
-            label="file name"
-            type="text"
-            fullWidth
-            value={folderName}
-            onChange={(e) => setFolderName(e.target.value)}
-            variant="outlined"
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose} color="secondary">
-            cancel
-          </Button>
-          <Button onClick={handleCreateFolder} color="primary">
-            create
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </div>
-  );
-};
+      <DialogContent sx={{ pt: 3, pb: 2 }}>
+        {/* <Typography variant="body2" sx={{ mb: 2 }}>
+          צור תיקיה חדשה בתוך התיקיה הנוכחית. התיקיה תופיע מיד בגלריה שלך.
+        </Typography> */}
 
-export default CreateFolder;
+        <TextField
+          autoFocus
+          margin="dense"
+          label="שם התיקיה"
+          type="text"
+          fullWidth
+          variant="outlined"
+          value={folderName}
+          onChange={(e) => {
+            setFolderName(e.target.value)
+            setError("")
+          }}
+          error={!!error}
+          helperText={error}
+          InputProps={{
+            sx: { borderRadius: "8px" },
+          }}
+          sx={{
+            direction: "rtl",
+            "& .MuiInputLabel-root": {
+              right: 14,
+              left: "auto",
+              transformOrigin: "right top",
+            },
+          }}
+        />
+      </DialogContent>
+
+      <DialogActions sx={{ px: 3, pb: 3, pt: 1 }}>
+        <Button onClick={handleClose} variant="outlined" sx={{ borderRadius: "8px" }}>
+          ביטול
+        </Button>
+        <Button
+          onClick={handleSubmit}
+          variant="contained"
+          sx={{
+            borderRadius: "8px",
+            boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
+            "&:hover": {
+              boxShadow: "0 6px 12px rgba(0,0,0,0.15)",
+            },
+          }}
+        >
+          צור תיקיה
+        </Button>
+      </DialogActions>
+    </Dialog>
+  )
+}
+
+
+
