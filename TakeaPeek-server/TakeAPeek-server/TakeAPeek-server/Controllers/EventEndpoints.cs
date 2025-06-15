@@ -33,7 +33,7 @@ namespace TakeAPeek_server.Controllers
 
                 var events = await eventService.GetEventsByUserIdAsync(userId);
                 return Results.Ok(events);
-            });
+            }).DisableAntiforgery(); 
 
             // Get events by date range
             app.MapGet("/events/range", async ([FromQuery] DateTime startDate, [FromQuery] DateTime endDate, [FromQuery] int userId, IEventService eventService) =>
