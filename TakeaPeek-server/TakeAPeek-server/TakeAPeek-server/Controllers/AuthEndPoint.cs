@@ -1,7 +1,7 @@
 ﻿
 using global::TakeAPeek_server.Services.CServices;
-using Microsoft.AspNetCore.Authentication.Google;
-using Microsoft.AspNetCore.Authentication;
+//using Microsoft.AspNetCore.Authentication.Google;
+//using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using System.Security.Claims;
 using TakeAPeek_server.Entities;
@@ -110,55 +110,55 @@ namespace TakeAPeek_server.Controllers
 
 
 
-            app.MapGet("/auth/google/login", async (HttpContext context) =>
-            {
-                var props = new AuthenticationProperties { RedirectUri = "/auth/google/callback" };
-                return Results.Challenge(props, [GoogleDefaults.AuthenticationScheme]);
-            });
+            //app.MapGet("/auth/google/login", async (HttpContext context) =>
+            //{
+            //    var props = new AuthenticationProperties { RedirectUri = "/auth/google/callback" };
+            //    return Results.Challenge(props, [GoogleDefaults.AuthenticationScheme]);
+            //});
 
-            app.MapGet("/auth/google/callback", async (
-                HttpContext context,
-                AuthService authService,
-                IUserService userService,
-                IUserRoleService userRoleService) =>
-            {
-                var result = await context.AuthenticateAsync(GoogleDefaults.AuthenticationScheme);
+            //app.MapGet("/auth/google/callback", async (
+            //    HttpContext context,
+            //    AuthService authService,
+            //    IUserService userService,
+            //    IUserRoleService userRoleService) =>
+            //{
+            //    var result = await context.AuthenticateAsync(GoogleDefaults.AuthenticationScheme);
 
-                if (!result.Succeeded || result.Principal == null)
-                    return Results.Unauthorized();
+            //    if (!result.Succeeded || result.Principal == null)
+            //        return Results.Unauthorized();
 
-                var email = result.Principal.FindFirst(ClaimTypes.Email)?.Value;
-                var name = result.Principal.FindFirst(ClaimTypes.Name)?.Value;
-                var googleId = result.Principal.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            //    var email = result.Principal.FindFirst(ClaimTypes.Email)?.Value;
+            //    var name = result.Principal.FindFirst(ClaimTypes.Name)?.Value;
+            //    var googleId = result.Principal.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-                if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(googleId))
-                    return Results.BadRequest("Missing Google user info");
+            //    if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(googleId))
+            //        return Results.BadRequest("Missing Google user info");
 
-                // בדיקה אם המשתמש כבר קיים במסד
-                var user = await userService.GetUserByEmail(email);
-                if (user == null)
-                {
-                    // יצירת משתמש חדש
-                    var registerModel = new RegisterModel
-                    {
-                        Name = name ?? "Google User",
-                        Email = email,
-                        Password = Guid.NewGuid().ToString(), // לא בשימוש בפועל
-                        RoleName = "Editor"
-                    };
+            //    // בדיקה אם המשתמש כבר קיים במסד
+            //    var user = await userService.GetUserByEmail(email);
+            //    if (user == null)
+            //    {
+            //        // יצירת משתמש חדש
+            //        var registerModel = new RegisterModel
+            //        {
+            //            Name = name ?? "Google User",
+            //            Email = email,
+            //            Password = Guid.NewGuid().ToString(), // לא בשימוש בפועל
+            //            RoleName = "Editor"
+            //        };
 
-                    user = await userService.CreateUser(registerModel);
-                    if (user == null)
-                        return Results.BadRequest("Failed to create user");
-                }
+            //        user = await userService.CreateUser(registerModel);
+            //        if (user == null)
+            //            return Results.BadRequest("Failed to create user");
+            //    }
 
-                // קבלת תפקידים
-                var roles = await userRoleService.GetUserRoles(user.Id);
-                var token = authService.GenerateJwtToken(user.Id.ToString(), user.Email, roles);
+            //    // קבלת תפקידים
+            //    var roles = await userRoleService.GetUserRoles(user.Id);
+            //    var token = authService.GenerateJwtToken(user.Id.ToString(), user.Email, roles);
 
-                // החזרת הטוקן
-                return Results.Ok(new { Token = token });
-            });
+            //    // החזרת הטוקן
+            //    return Results.Ok(new { Token = token });
+            //});
 
 
         }
