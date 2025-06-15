@@ -43,3 +43,7 @@ TestResults/
 
 # Ignore publish directory
 publish/
+
+# Ignore node_modules
+node_modules/
+**/*.env

@@ -15,6 +15,7 @@ using Amazon.Extensions.NETCore.Setup;
 using Microsoft.AspNetCore.Builder;
 using TakeAPeek_server.Services.CServices.TakeAPeek_server.Services;
 using TakeAPeek_server.Services;
+using Microsoft.AspNetCore.Authentication.Google;
 
 Env.Load();
 
@@ -30,10 +31,29 @@ var openAiApiKey = builder.Configuration["OPENAI_API_KEY"];
 var connectionString = builder.Configuration["CONNECTION_STRING"];
 
 // הוספת JWT Authentication
+//builder.Services.AddAuthentication(options =>
+//{
+//    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+//    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+//})
+//.AddJwtBearer(options =>
+//{
+//    options.TokenValidationParameters = new TokenValidationParameters
+//    {
+//        ValidateIssuer = true,
+//        ValidateAudience = true,
+//        ValidateLifetime = true,
+//        ValidateIssuerSigningKey = true,
+//        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+//        ValidAudience = builder.Configuration["Jwt:Audience"],
+//        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+//    };
+//});
+
 builder.Services.AddAuthentication(options =>
 {
-    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
 })
 .AddJwtBearer(options =>
 {
@@ -47,7 +67,15 @@ builder.Services.AddAuthentication(options =>
         ValidAudience = builder.Configuration["Jwt:Audience"],
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
     };
+})
+.AddGoogle(options =>
+{
+    options.ClientId = builder.Configuration["GOOGLE_CLIENT_ID"];
+    options.ClientSecret = builder.Configuration["GOOGLE_CLIENT_SECRET"];
+    Console.WriteLine("GOOGLE_CLIENT_ID: " + builder.Configuration["GOOGLE_CLIENT_ID"]);
+    options.CallbackPath = "/auth/google/callback"; // הנתיב ש-Google תשלח אליו לאחר התחברות
 });
+
 
 // הוספת הרשאות מבוססות-תפקידים
 builder.Services.AddAuthorization(options =>
@@ -162,6 +190,9 @@ app.UseSwaggerUI(c =>
 });
 
 app.UseAntiforgery();
+app.UseAuthentication();
+app.UseAuthorization();
+
 // =========== endpoints injection ===========
 FileEndpoints.MapFileEndpoints(app);
 FolderEndpoints.MapFolderEndpoints(app);

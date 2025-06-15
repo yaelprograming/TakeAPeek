@@ -98,6 +98,11 @@ namespace TakeAPeek_server.Services.CServices
             //return string.Join(",", roles);
             return user;
         }
+        public async Task<User?> GetUserByEmail(string email)
+        {
+            return await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+        }
+
     }
 }
 
