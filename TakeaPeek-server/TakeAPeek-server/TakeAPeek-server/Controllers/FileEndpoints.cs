@@ -24,7 +24,7 @@ namespace TakeAPeek_server.Controllers
 
             app.MapGet("/files/{id}", async (int id, IFileService fileService) => await fileService.GetFile(id)).DisableAntiforgery();
 
-            
+         
 
             // app.MapPost("/files", async (TakeAPeek_server.Entities.File file, IFileService fileService) => await fileService.CreateFile(file));
             // .RequireAuthorization("Editor", "Admin"); ;
