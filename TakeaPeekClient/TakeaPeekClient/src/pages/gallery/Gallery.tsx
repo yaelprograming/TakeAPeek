@@ -573,7 +573,8 @@ export function Gallery() {
         onDownload={downloadFilteredImages}
       />
 
-      <Box sx={{ flexGrow: 1, display: "flex", flexDirection: "column", overflow: "hidden" }}>
+      <Box sx={{ flexGrow: 1, display: "flex", flexDirection: "column", overflow: "hidden" , ml: { xs: 0, md: "280px" }
+}}>
         <AppBar position="static" color="default" elevation={0} sx={{ borderBottom: 1, borderColor: "divider" }}>
           <Toolbar>
             {isMobile && (
