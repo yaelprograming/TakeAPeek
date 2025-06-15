@@ -51,7 +51,7 @@ export function Gallery() {
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down("md"))
   const { userId } = useCurrentUser()
-  const { enqueueSnackbar } = useSnackbar()//?
+  const { enqueueSnackbar } = useSnackbar()
 
   const [sidebarOpen, setSidebarOpen] = useState(!isMobile)
   const [currentFolder, setCurrentFolder] = useState<string | null>(null)
@@ -79,9 +79,6 @@ export function Gallery() {
     enqueueSnackbar("התמונות הועלו בהצלחה!", { variant: "success" })
   }
 
-  // useEffect(() => {
-  //   fetchData(currentFolder)
-  // }, [currentFolder])
 
   useEffect(() => {
     if (userId) {
@@ -108,12 +105,7 @@ export function Gallery() {
       const url = folderId ? `/folders/${folderId}/contents` : `/folders/0/contents`
 console.log(url, "URL for fetching data")
       const { data } = await axiosInstance.get(url)
-      // const { data } = await axiosInstance.get(url, {
-      //   headers: getAuthHeaders(),
-      // })
-
-      // setFolders(data.folders?.filter((folder: Folder) => !folder.isDeleted) || [])
-      // setFiles(data.files?.filter((file: ImageFile) => !file.isDeleted) || [])
+      
       console.log("Data fetched successfully- all data:", data)
       const userFolders =
         data.folders?.filter((folder: Folder) => !folder.isDeleted && folder.ownerId === userId) || []
