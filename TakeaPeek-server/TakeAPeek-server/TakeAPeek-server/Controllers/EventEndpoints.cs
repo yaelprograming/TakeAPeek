@@ -24,8 +24,16 @@ namespace TakeAPeek_server.Controllers
             });
 
             // Get events by user ID
-            app.MapGet("/events/user/{userId}", async (int userId, IEventService eventService) =>
-                await eventService.GetEventsByUserIdAsync(userId));
+            app.MapGet("/events/user", async (HttpContext http, IEventService eventService) =>
+            {
+                var userIdStr = http.User.FindFirst("userId")?.Value
+                 ?? http.User.FindFirst("sub")?.Value; 
+                if (!int.TryParse(userIdStr, out var userId))
+                    return Results.Unauthorized();
+
+                var events = await eventService.GetEventsByUserIdAsync(userId);
+                return Results.Ok(events);
+            });
 
             // Get events by date range
             app.MapGet("/events/range", async ([FromQuery] DateTime startDate, [FromQuery] DateTime endDate, [FromQuery] int userId, IEventService eventService) =>
