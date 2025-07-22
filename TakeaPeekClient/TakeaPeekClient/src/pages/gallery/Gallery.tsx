@@ -575,7 +575,6 @@ export function Gallery() {
 
       <Box sx={{ flexGrow: 1, display: "flex", flexDirection: "column", overflow: "hidden" ,
 }}>
-            <Box sx={{marginLeft:"50px"}}>
         <AppBar position="static" color="default" elevation={0} sx={{ borderBottom: 1, borderColor: "divider" }}>
           <Toolbar>
             {isMobile && (
@@ -680,6 +679,5 @@ export function Gallery() {
         onCreateFolder={handleCreateFolder}
       />
     </Box>
-          </Box>
   )
 }
